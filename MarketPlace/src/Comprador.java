@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class Comprador {
+public class Comprador implements Serializable{
 	
 	private String nome;
 	private String email;
@@ -9,6 +10,7 @@ public class Comprador {
 	private String endereco;
 	private double pontuacao;
 	
+	public Comprador() {}
 	
 	public Comprador (String nome,String email,String senha,String tipoUsuario,String cpf,String endereco,double pontuacao) {
 		this.nome = nome;

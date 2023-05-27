@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+import entidades.Loja;
+import serializacao.Serializacao;
+
 public class MarketPlace {
 	
 	private static ArrayList<Object> listaDeObjetos = new ArrayList<>();

@@ -3,9 +3,13 @@ package entidades;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Loja implements Serializable{
+public class Loja implements IFCrud<Loja>, Serializable{
 	
-	private static int idProduto = 1;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2L;
+	private int id;
 	private String nome;
 	private String email;
 	private String senha;
@@ -14,12 +18,14 @@ public class Loja implements Serializable{
 	private String cpf; 
 	private String endereco;
 	private double reputacao;
+	private String conceito; //Avaliação da loja(ruim, medio, bom, excelente)
 	private ArrayList<Produto> listaDeProdutos = new ArrayList<>();
 	
 	public Loja() {}
 	
-	public Loja(String nome, String email, String senha, String tipoUsuario, String cnpj, String cpf, String endereco,
-			double reputacao, ArrayList<Produto> listaDeProdutos) {
+	public Loja(int id, String nome, String email, String senha, String tipoUsuario, String cnpj, String cpf, String endereco,
+			double reputacao, String conceito, ArrayList<Produto> listaDeProdutos) {
+		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
@@ -28,7 +34,16 @@ public class Loja implements Serializable{
 		this.cpf = cpf;
 		this.endereco = endereco;
 		this.reputacao = reputacao;
+		this.conceito = conceito;
 		this.listaDeProdutos = listaDeProdutos;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getNome() {
@@ -95,6 +110,14 @@ public class Loja implements Serializable{
 		this.reputacao = reputacao;
 	}
 	
+	public String getConceito() {
+		return conceito;
+	}
+
+	public void setConceito(String conceito) {
+		this.conceito = conceito;
+	}
+	
 	public ArrayList<Produto> getListaDeProdutos() {
 		return listaDeProdutos;
 	}
@@ -104,60 +127,80 @@ public class Loja implements Serializable{
 	}
 	
 	
-	//CRUD Produtos
-	public void cadastrar(Produto produto) {
-		produto.setId(idProduto);
-		idProduto++;
-		listaDeProdutos.add(produto);
-	}
 	
-	public String exibir(int id) {
-		return listaDeProdutos.get(id - 1).toString();
-	}
-	
-	public String buscar(String nomeBuscado) {
-		String nomeDoProduto;
-		for(int i = 0; i < listaDeProdutos.size(); i++){
-			nomeDoProduto = listaDeProdutos.get(i).getDescricao().toLowerCase();
-			
-			if (nomeDoProduto.contains(nomeBuscado.toLowerCase())){
-				Produto produto = listaDeProdutos.get(i);
-				return produto.toString();
-			}
-		}
-		return "Produto não encontrado na busca";
-	}
-	
-	//Atualiza o produto ao passar o id original e o novo produto já atualizado
-	public void atualizar(int id, Produto novoProduto) {
-		
-		for(int i = 0; i < listaDeProdutos.size(); i++){
-			int idDoProduto = listaDeProdutos.get(i).getId();
-			
-			if (idDoProduto == id){
-				listaDeProdutos.set(i, novoProduto);
-				System.out.println("Produto atualizado");
-			}
-		}
-	}
-	
-	public void remover(int id) {
-		for(int i = 0; i < listaDeProdutos.size(); i++){
-			int idDoProduto = listaDeProdutos.get(i).getId();
-			
-			if (idDoProduto == id){
-				listaDeProdutos.remove(i);
-				System.out.println("Produto removido");
-			}
-		}
-	}
-	
-	public void listar() {
-		System.out.println("Lista de Produtos: ");
-		System.out.println("ID -> descricao ");
+	//CRUD Loja:
 
-		for(Produto produto : listaDeProdutos) {
-			System.out.println(produto.getId() + " -> " + produto.getDescricao());
+	//Cadastra o próprio objeto Loja na lista especificada
+	public void cadastrar(ArrayList<Loja> listaDeLojas) {
+		listaDeLojas.add(this); //A atualização do Id ocorre na classe Fachada
+		System.out.println("Loja cadastrada com sucesso");
+	}
+
+	//Exibe a Loja pelo ID
+	public String exibir(int id, ArrayList<Loja> listaDeLojas) { 
+
+		for(int i = 0; i < listaDeLojas.size(); i++){
+			if (listaDeLojas.get(i).getId() == id) {
+				return listaDeLojas.get(i).toString();
+			}
+		}
+
+		return "Loja não encontrada \n";
+	}
+
+	public String buscar(String nomeBuscado, ArrayList<Loja> listaDeLojas) {
+		for(int i = 0; i < listaDeLojas.size(); i++){
+			String nomeDaLoja = listaDeLojas.get(i).getNome().toLowerCase();
+
+			if (nomeDaLoja.contains(nomeBuscado.toLowerCase())){
+				Loja loja = listaDeLojas.get(i);
+				return loja.toString();
+			}
+		}
+		return "Loja não encontrada na busca \n";
+	}
+
+	//Atualiza a loja através do id original, a nova loja já atualizada e a lista de lojas
+	public String atualizar(Loja novaLoja, ArrayList<Loja> listaDeLojas) {
+
+		for(int i = 0; i < listaDeLojas.size(); i++){
+			int idDaLoja = listaDeLojas.get(i).getId();
+
+			if (idDaLoja == this.id){
+				listaDeLojas.set(i, novaLoja);
+				return "Loja atualizada com sucesso \n";
+			}
+		}
+		return "Loja não encontrada\n";
+	}
+
+	public String remover(ArrayList<Loja> listaDeLojas) {
+		for(int i = 0; i < listaDeLojas.size(); i++){
+			int idDaLoja = listaDeLojas.get(i).getId();
+
+			if (idDaLoja == this.id){
+				listaDeLojas.remove(i);
+				return "Loja removida \n";
+			}
+		}
+		return "Loja não encontrada \n";
+	}
+
+	public void listar(ArrayList<Loja> listaDeLojas) {
+		System.out.println("Lista de Lojas: \n");
+		System.out.println("ID -> Nome da Loja -> CNPJ");
+		
+		for(Loja loja : listaDeLojas) {
+			System.out.println(loja.getId() + " -> " + loja.getNome() + " -> " + loja.getCnpj());
+		}
+	}
+	
+	public void listarProdutos() {
+		System.out.println("Lista de Produtos: \n");
+		System.out.println("ID -> Descricao -> Valor");
+
+		for(Produto produto : this.getListaDeProdutos()) {
+			System.out.println(produto.getId() + " -> " + produto.getDescricao() + " -> R$" + produto.getValor());
 		}
 	}
 }

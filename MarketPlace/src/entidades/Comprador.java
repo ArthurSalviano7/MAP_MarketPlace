@@ -3,8 +3,13 @@ package entidades;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Comprador implements Serializable{
+public class Comprador implements IFCrud<Comprador>, Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3L;
+	private int id;
 	private String nome;
 	private String email;
 	private String senha;
@@ -16,7 +21,8 @@ public class Comprador implements Serializable{
 	
 	public Comprador() {}
 	
-	public Comprador (String nome,String email,String senha,String tipoUsuario,String cpf,String endereco) {
+	public Comprador (int id, String nome,String email,String senha,String tipoUsuario,String cpf,String endereco) {
+		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
@@ -26,7 +32,8 @@ public class Comprador implements Serializable{
 		
 	}
 
-	public Comprador (String nome,String email,String senha,String tipoUsuario,String cpf,String endereco,double pontuacao) {
+	public Comprador (int id, String nome,String email,String senha,String tipoUsuario,String cpf,String endereco,double pontuacao) {
+		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
@@ -36,6 +43,14 @@ public class Comprador implements Serializable{
 		this.pontuacao = pontuacao;
 	}
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getNome() {
 		return nome;
 	}
@@ -87,6 +102,10 @@ public class Comprador implements Serializable{
 	public double getPontuacao() {
 		return pontuacao;
 	}
+	
+	public void setPontuacao(double pontuacao) {
+		this.pontuacao = pontuacao;
+	}
 
 	/* *
 	public void listarHistorico(){
@@ -101,6 +120,73 @@ public class Comprador implements Serializable{
 		}
 
 	}*/
+	
+	//CRUD Comprador:
+
+		//Cadastra o próprio objeto Comprador na lista especificada
+		public void cadastrar(ArrayList<Comprador> listaDeCompradores) {
+			listaDeCompradores.add(this); //A atualização do Id ocorre na classe Fachada
+			System.out.println("Usuário Comprador cadastrado com sucesso");
+		}
+
+		//Exibe o Comprador pelo ID
+		public String exibir(int id, ArrayList<Comprador> listaDeCompradores) { 
+
+			for(int i = 0; i < listaDeCompradores.size(); i++){
+				if (listaDeCompradores.get(i).getId() == id) {
+					return listaDeCompradores.get(i).toString();
+				}
+			}
+
+			return "Usuário Comprador não encontrado \n";
+		}
+
+		public String buscar(String nomeBuscado, ArrayList<Comprador> listaDeCompradores) {
+			for(int i = 0; i < listaDeCompradores.size(); i++){
+				String nomeDoComprador = listaDeCompradores.get(i).getNome().toLowerCase();
+
+				if (nomeDoComprador.contains(nomeBuscado.toLowerCase())){
+					Comprador comprador = listaDeCompradores.get(i);
+					return comprador.toString();
+				}
+			}
+			return "Usuário Comprador não foi encontrado na busca \n";
+		}
+
+		//Atualiza o Comprador ao passar o id original, o novo usuário já atualizada e a lista de compradores
+		public String atualizar(Comprador novoComprador, ArrayList<Comprador> listaDeCompradores) {
+
+			for(int i = 0; i < listaDeCompradores.size(); i++){
+				int idDoComprador = listaDeCompradores.get(i).getId();
+
+				if (idDoComprador == this.id){
+					listaDeCompradores.set(i, novoComprador);
+					return "Usuário Comprador atualizado com sucesso \n";
+				}
+			}
+			return "Usuário Comprador não encontrado\n";
+		}
+
+		public String remover(ArrayList<Comprador> listaDeCompradores) {
+			for(int i = 0; i < listaDeCompradores.size(); i++){
+				int idDoComprador = listaDeCompradores.get(i).getId();
+
+				if (idDoComprador == this.id){
+					listaDeCompradores.remove(i);
+					return "Usuário Comprador removido \n";
+				}
+			}
+			return "Usuário Comprador não encontrado \n";
+		}
+
+		public void listar(ArrayList<Comprador> listaDeCompradores) {
+			System.out.println("Lista de Compradores: \n");
+			System.out.println("ID -> Nome do Usuário -> Email");
+			
+			for(Comprador comprador : listaDeCompradores) {
+				System.out.println(comprador.getId() + " -> " + comprador.getNome() + " -> " + comprador.getEmail());
+			}
+		}
 }
 
 	 

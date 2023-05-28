@@ -1,6 +1,7 @@
+/.classpath
+/.project
+/Fachada/
 /MarketPlace.class
-/Serializacao.class
-/objTeste.class
-/Comprador.class
-/Loja.class
-/Produto.class
+/arquivoObjetos
+/entidades/
+/serializacao/

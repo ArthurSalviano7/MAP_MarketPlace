@@ -7,13 +7,12 @@ import java.util.List;
 
 
 public class Fachada {
-    private List<Comprador> listaCompradores;
-    private List<Loja> listaLojas;
-
-    public Fachada(){
-        listaCompradores = new ArrayList<>();
-        listaLojas = new ArrayList<>();
-    }
+    private ArrayList<Comprador> listaCompradores = new ArrayList<>();
+    private ArrayList<Loja> listaLojas = new ArrayList<>();
+	private static int id = 1; //Id para Lojas e compradores
+	private static ArrayList<Object> listaDeObjetos = new ArrayList<>();
+		
+    public Fachada(){}
 
     public void autenticar(String email, String senha){
         boolean compradorAutenticado = false;
@@ -40,10 +39,9 @@ public class Fachada {
             exibirMenuLoja(); // Incompleto
         }
         else{
-            System.out.println("Usuário não cadastro!!");
+            System.out.println("Usuário não cadastrado!!");
         }
-        
-    }
+    }//Fim do método autenticar()
 
     public void listarCompradores(){
         for(Comprador comprador : listaCompradores){
@@ -61,6 +59,21 @@ public class Fachada {
             System.out.println("-------------------------");
         }
     }
-
+    
+    //listarProdutos()
+    
+    //Método para recuperar o Id de acordo com os objetos do arquivo
+    public static void recuperarID() {
+		if (!listaDeObjetos.isEmpty()) {
+			Object ultimoObjeto = listaDeObjetos.get(listaDeObjetos.size() - 1);
+			if (ultimoObjeto instanceof Loja) {
+				Loja ultimaLoja = (Loja) ultimoObjeto;
+				id = ultimaLoja.getId() + 1;
+			} else if (ultimoObjeto instanceof Comprador) {
+				Comprador ultimoComprador = (Comprador) ultimoObjeto;
+				id = ultimoComprador.getId() + 1;
+			}
+		}
+	}//Fim do método recuperarID
 
 }

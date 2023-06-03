@@ -14,33 +14,21 @@ public class Fachada {
 		
     public Fachada(){}
 
-    public void autenticar(String email, String senha){
-        boolean compradorAutenticado = false;
-        boolean lojaAutenticada = false;
+    public String autenticar(String email, String senha) {
 
         for (Comprador comprador : listaCompradores){ 
             if(comprador.getEmail().equals(email) && comprador.getSenha().equals(senha)){
-                compradorAutenticado = true;
-                break; // Não percorrer a lista toda
+                return "Usuário autenticado com sucesso!!";
             }
         }
 
         for(Loja loja : listaLojas){
             if(loja.getEmail().equals(email) && loja.getSenha().equals(senha)){
-                lojaAutenticada = true;
-                break; // Não percorrer a lista toda
+                return "Usuário autenticado com sucesso!!";
             }
         }
 
-        if(compradorAutenticado){ 
-           // exibirMenuComprador(); // Incompleto
-        }
-        else if(lojaAutenticada){
-          //  exibirMenuLoja(); // Incompleto
-        }
-        else{
-            System.out.println("Usuário não cadastrado!!");
-        }
+        return "Usuário não cadastrado!!";
     }//Fim do método autenticar()
 
     public void listarCompradores(){
@@ -63,35 +51,32 @@ public class Fachada {
     //listarProdutos()
     
     //Método para recuperar o Id de acordo com os objetos do arquivo
-    public static void recuperarID() {
-		if (!listaDeObjetos.isEmpty()) {
+    public static int recuperarID() {
+		if (!listaDeObjetos.isEmpty()) { //Se a lista não estiver vazia
 			Object ultimoObjeto = listaDeObjetos.get(listaDeObjetos.size() - 1);
 			if (ultimoObjeto instanceof Loja) {
 				Loja ultimaLoja = (Loja) ultimoObjeto;
 				id = ultimaLoja.getId() + 1;
+				return id;
 			} else if (ultimoObjeto instanceof Comprador) {
 				Comprador ultimoComprador = (Comprador) ultimoObjeto;
-				id = ultimoComprador.getId() + 1;
+				 id = ultimoComprador.getId() + 1;
+				 return id;
 			}
 		}
+		id = 1;
+		return id;
 	}//Fim do método recuperarID
 
-    
-    private static void adicionarComprador(Comprador comprador) {
-    	listaCompradores.add(comprador);
-    }
-    
     public static void cadastrarComprador(String nome, String email, String senha, String cpf, String endereco) {
     	Comprador comprador = new Comprador(id, nome, email, senha, "Comprador", cpf, endereco);
-    	adicionarComprador(comprador);
+    	comprador.cadastrar(listaCompradores);
+    	id++;
     }
 
-    private static void adicionarLojas(Loja loja) {
-        listaLojas.add(loja);
-    }
-
-    public static void cadastrarLojas(String nome, String email, String senha, String cnpj,String cpf, String endereco, double reputacao, String conceito) {
-        Loja lojas = new Loja(id, nome, email, senha,"Loja", cnpj, cpf, endereco, reputacao, conceito);
-        adicionarLojas(lojas);
+    public static void cadastrarLoja(String nome, String email, String senha, String cnpj, String cpf, String endereco) {
+        Loja loja = new Loja(id, nome, email, senha,"Loja", cnpj, cpf, endereco);
+        loja.cadastrar(listaLojas);
+        id++;
     }
  }

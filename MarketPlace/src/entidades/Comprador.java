@@ -106,6 +106,16 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
 	public void setPontuacao(double pontuacao) {
 		this.pontuacao = pontuacao;
 	}
+	
+	public String toString(){
+        return "ID: " + id + "\n"
+                + "Nome: " + nome + "\n"
+                + "Email: " + email + "\n"
+                + "Senha: " + senha + "\n"
+                + "Tipo de Usuário: " + tipoUsuario + "\n"
+                + "CPF: " + cpf + "\n"
+                + "Endereço: " + endereco +"\n";
+    }
 
 	/* *
 	public void listarHistorico(){
@@ -180,7 +190,7 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
 		}
 
 		public void listar(ArrayList<Comprador> listaDeCompradores) {
-			System.out.println("Lista de Compradores: \n");
+			System.out.println("Lista de Compradores:");
 			System.out.println("ID -> Nome do Usuário -> Email");
 			
 			for(Comprador comprador : listaDeCompradores) {

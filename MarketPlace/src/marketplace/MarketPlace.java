@@ -1,6 +1,7 @@
 package marketplace;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import Fachada.Fachada;
@@ -21,14 +22,28 @@ public class MarketPlace {
 
 	private static void menu(Fachada fachada, Scanner sc) {
 		System.out.println("MENU");
-		System.out.println("1- Cadastrar comprador");
+		System.out.println("1- Login");
+		System.out.println("2- Cadastrar comprador");
 		System.out.println("2- Cadastrar loja");
+
+		int comando = 0;
 		
+		try {
+			comando = sc.nextInt();
+		}catch(InputMismatchException exception) {
+			System.out.println("Comando inválido");
+		}
+		
+		switch(comando) {
+			case 2:
+				cadastrarComprador();
+		}
 		cadastrarComprador();
 		cadastrarLoja();
 	}
 	
 	private static void cadastrarComprador() {
+		System.out.print("Digite seu nome: ");
 		String nome = sc.nextLine();
 		String email = sc.nextLine();
 		String senha = sc.nextLine();

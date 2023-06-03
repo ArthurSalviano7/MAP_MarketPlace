@@ -1,3 +1,5 @@
+package marketplace;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -42,7 +44,7 @@ public class MarketPlace {
 		String senha = sc.nextLine();
 		String cnpj	= sc.nextLine();
 		String endereco = sc.nextLine();
-		fachada.cadastrarLojas(nome, email, senha, cnpj, endereco);
+		//fachada.cadastrarLojas(nome, email, senha, cnpj, endereco);
 		fachada.listarLojas();
 	}
 

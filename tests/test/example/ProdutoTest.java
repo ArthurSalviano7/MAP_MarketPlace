@@ -1,4 +1,4 @@
-package entidadesTest;
+package test.example;
 
 import static org.junit.jupiter.api.Assertions.*;
 

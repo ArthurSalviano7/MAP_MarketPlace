@@ -1,4 +1,4 @@
-package entidadesTest;
+package test.example;
 
 import entidades.Loja;
 import entidades.Produto;
@@ -67,8 +67,8 @@ public class LojaTest {
 
     @Test
     public void testListarProdutos() {
-        Produto produto1 = new Produto(1, "Produto 1", 10.0);
-        Produto produto2 = new Produto(2, "Produto 2", 15.0);
+        Produto produto1 = new Produto(1, "Produto 1", 10, 39.99, "Vestuário", "Adidas");
+        Produto produto2 = new Produto(2, "Produto 2", 15, 20.25, "Livros", "Marca");
         loja.getListaDeProdutos().add(produto1);
         loja.getListaDeProdutos().add(produto2);
         loja.listarProdutos();

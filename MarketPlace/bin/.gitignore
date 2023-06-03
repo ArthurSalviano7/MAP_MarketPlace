@@ -1,7 +1,3 @@
-/.classpath
-/.project
-/Fachada/
-/MarketPlace.class
-/arquivoObjetos
-/entidades/
-/serializacao/
+/module-info.class
+/marketplace/
+/test/

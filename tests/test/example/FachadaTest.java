@@ -1,4 +1,5 @@
-package Fachada;
+package test.example;
+import Fachada.Fachada;
 import entidades.Comprador;
 import entidades.Loja;
 import org.junit.jupiter.api.Assertions;

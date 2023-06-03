@@ -6,10 +6,11 @@ import serializacao.Serializacao;
 
 public class MarketPlace {
 	
+	static Scanner sc = new Scanner(System.in);
+	static Fachada fachada = new Fachada();
+	
 	public static void main(String[] args) {
 		
-		Fachada fachada = new Fachada();
-		Scanner sc = new Scanner(System.in);
 		
 		menu(fachada, sc);
 		sc.close();
@@ -41,8 +42,8 @@ public class MarketPlace {
 		String senha = sc.nextLine();
 		String cnpj	= sc.nextLine();
 		String endereco = sc.nextLine();
-		fachada.cadastrarLoja(nome, email, senha, cnpj, endereco);
-		fachada.listarLoja();
+		fachada.cadastrarLojas(nome, email, senha, cnpj, endereco);
+		fachada.listarLojas();
 	}
 
 }

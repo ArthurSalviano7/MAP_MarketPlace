@@ -90,8 +90,8 @@ public class Fachada {
         listaLojas.add(loja);
     }
 
-    public static void cadastrarlojas(String nome, String email, String senha, String cnpj, String endereco) {
-        Loja lojas = new Loja(id, nome, email, senha, tipoUsuario:"Lojas", cnpj, endereco);
+    public static void cadastrarLojas(String nome, String email, String senha, String cnpj,String cpf, String endereco, double reputacao, String conceito) {
+        Loja lojas = new Loja(id, nome, email, senha,"Loja", cnpj, cpf, endereco, reputacao, conceito);
         adicionarLojas(lojas);
     }
  }

@@ -24,7 +24,7 @@ public class Loja implements IFCrud<Loja>, Serializable{
 	public Loja() {}
 	
 	public Loja(int id, String nome, String email, String senha, String tipoUsuario, String cnpj, String cpf, String endereco,
-			double reputacao, String conceito, ArrayList<Produto> listaDeProdutos) {
+			double reputacao, String conceito) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
@@ -35,8 +35,12 @@ public class Loja implements IFCrud<Loja>, Serializable{
 		this.endereco = endereco;
 		this.reputacao = reputacao;
 		this.conceito = conceito;
-		this.listaDeProdutos = listaDeProdutos;
+
+		
 	}
+	
+	
+	
 	
 	public int getId() {
 		return id;

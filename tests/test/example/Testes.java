@@ -3,10 +3,13 @@ import Fachada.Fachada;
 import entidades.Comprador;
 import entidades.Loja;
 import entidades.Produto;
+import serializacao.Serializacao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
@@ -41,7 +44,7 @@ public class Testes {
         loja.setNome("Loja Teste");
         loja.setEmail("teste@teste.com");
         loja.setSenha("senha123");
-        loja.setTipoUsuario("Tipo");
+        loja.setTipoUsuario("Loja");
         loja.setCnpj("123456789");
         loja.setCpf("123456789");
         loja.setEndereco("Endereço");
@@ -59,59 +62,71 @@ public class Testes {
     //TESTES PARA FACHADA:
     @Test
     public void testAutenticarCompradorAutenticado() {
-        // Arrange
-        Comprador comprador = new Comprador(1, "Jose", "jose@gmail.com", "1234", "Comprador", "12345678922", "rua Clementino Procropio");
+        Comprador comprador = new Comprador();
+        comprador.setNome("Comprador Teste");
+        comprador.setEmail("jose@gmail.com");
+        comprador.setSenha("1234");
+        comprador.setTipoUsuario("Comprador");
+        comprador.setCpf("12345678911");
+        comprador.setEndereco("Endereço");
         fachada.cadastrarComprador(comprador.getNome(), comprador.getEmail(), comprador.getSenha(), comprador.getCpf(), comprador.getEndereco());
-
-        // Act
-        fachada.autenticar("jose@gmail.com", "1234");
-
+        
+        String mensagem = fachada.autenticar("jose@gmail.com", "1234");
+        Assertions.assertEquals("Usuário autenticado com sucesso!!", mensagem);
     }
 
     @Test
     public void testAutenticarLojaAutenticada() {
-        // Arrange
         Loja loja = new Loja(1, "PetStore", "petstore@outlook.com", "54321", "Loja", "CNPJ", "CPF", "Endereço", 5.0, "Conceito");
         fachada.cadastrarLoja(loja.getNome(), loja.getEmail(), loja.getSenha(), loja.getCnpj(), loja.getCpf(), loja.getEndereco());
 
 
-        // Act
         fachada.autenticar("petstore@outlook.com", "54321");
     }
 
     @Test
     public void testAutenticarUsuarioNaoCadastrado() {
-        
-    	String mensagem = fachada.autenticar("email@exemplo.com", "senha");
+    	String mensagem = fachada.autenticar("emailNãoExistente@exemplo.com", "senha");
         Assertions.assertEquals("Usuário não cadastrado!!", mensagem);
     }
 
     @Test
-    public void testRecuperarIDComObjetosVazios() {
-    	
+    public void testRecuperarIDListaVazia() {
+    	fachada.listaDeObjetos.clear();
         int id = fachada.recuperarID();
         Assertions.assertEquals(1, id);
-
     }
 
     @Test
     public void testRecuperarIDComUltimaLoja() {
-        Loja loja = new Loja(1, "Nome", "email@exemplo.com", "senha", "Loja", "CNPJ", "CPF", "Endereço", 5.0, "Conceito");
-        fachada.cadastrarLoja("Nome", "email@exemplo.com", "senha", "CNPJ", "CPF", "Endereço");
+        Loja loja = new Loja(3, "Nome", "email@exemplo.com", "senha", "Loja", "CNPJ", "CPF", "Endereço", 5.0, "Conceito");
+        fachada.listaDeObjetos.add(loja);
         
         int id = fachada.recuperarID();
-        Assertions.assertEquals(2, id);
-
+        Assertions.assertEquals(4, id); //Id do ultimo objeto + 1
     }
 
     @Test
     public void testRecuperarIDComUltimoComprador() {
-
     	Comprador comprador = new Comprador(1, "Nome", "email@exemplo.com", "senha", "Comprador", "CPF", "Endereço");
-        fachada.cadastrarComprador("Nome", "email@exemplo.com", "senha", "CPF", "Endereço");
+        fachada.listaDeObjetos.add(comprador);
         
         int id = fachada.recuperarID();
         Assertions.assertEquals(2, id);
+    }
+    
+    @Test
+    public void testListarCompradores() {
+    	String saidaEsperada = "Nome : Nome\nEmail : email@exemplo.com\n-------------------------\n"
+                + "Nome : Comprador Teste\nEmail : jose@gmail.com\n-------------------------\n";
+    	ByteArrayOutputStream saidaAtual = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(saidaAtual));
+        
+    	fachada.listarCompradores();        
+        System.setOut(System.out);
+
+    	
+        Assertions.assertEquals(saidaEsperada, saidaAtual.toString());
     }
 
     //FIM DOS TESTES PARA FACHADA
@@ -195,6 +210,17 @@ public class Testes {
 
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
+    
+    @Test
+    public void testExibirCompradorNaoExistente() {
+        Comprador comprador = new Comprador(1, "John Doe", "john@example.com", "password", "buyer", "123456789", "123 Street");
+        listaDeCompradores.add(comprador);
+
+        String expectedOutput = "Usuário Comprador não encontrado \n";
+        String actualOutput = comprador.exibir(5, listaDeCompradores);
+
+        Assertions.assertEquals(expectedOutput, actualOutput);
+    }
 
     @Test
     public void testBuscarComprador() {
@@ -208,11 +234,23 @@ public class Testes {
 
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
+    
+    @Test
+    public void testBuscarCompradorNaoExistente() {
+        Comprador comprador1 = new Comprador(1, "John Doe", "john@example.com", "password", "buyer", "123456789", "123 Street", 25.6);
+        listaDeCompradores.add(comprador1);
+
+        String expectedOutput = "Usuário Comprador não foi encontrado na busca \n";
+        String actualOutput = comprador1.buscar("jane", listaDeCompradores);
+
+        Assertions.assertEquals(expectedOutput, actualOutput);
+    }
 
     @Test
     public void testAtualizarComprador() {
-        Comprador comprador1 = new Comprador(1, "John Doe", "john@example.com", "password", "buyer", "123456789", "123 Street");
-        Comprador comprador2 = new Comprador(1, "John Smith", "john@example.com", "newpassword", "buyer", "123456789", "456 Street");
+        Comprador comprador1 = new Comprador(1, "Jonas", "john@example.com", "password", "buyer", "123456789", "123 Street");
+        Comprador comprador2 = new Comprador(2, "Jennifer", "john@example.com", "newpassword", "buyer", "123456789", "456 Street");
+
         listaDeCompradores.add(comprador1);
 
         String expectedOutput = "Usuário Comprador atualizado com sucesso \n";
@@ -221,8 +259,21 @@ public class Testes {
         Assertions.assertEquals(expectedOutput, actualOutput);
         Assertions.assertEquals(comprador2, listaDeCompradores.get(0));
     }
+    
     @Test
-    public void testarRemoverComprador() {
+    public void testAtualizarCompradorNaoExistente() {
+        Comprador comprador1 = new Comprador(1, "John Doe", "john@example.com", "password", "buyer", "123456789", "123 Street");
+        Comprador comprador2 = new Comprador(2, "John Smith", "john@example.com", "newpassword", "buyer", "123456789", "456 Street");
+        listaDeCompradores.add(comprador1);
+
+        String expectedOutput = "Usuário Comprador não encontrado\n";
+        String actualOutput = comprador2.atualizar(comprador1, listaDeCompradores);
+
+        Assertions.assertEquals(expectedOutput, actualOutput);
+    }
+    
+    @Test
+    public void testRemoverComprador() {
         Comprador comprador = new Comprador(1, "Fulano", "fulano@example.com", "senha", "comprador", "123456789", "Rua A");
         listaDeCompradores.add(comprador);
 
@@ -232,9 +283,19 @@ public class Testes {
         Assertions.assertEquals(saidaEsperada, saidaAtual);
         Assertions.assertEquals(0, listaDeCompradores.size());
     }
+    
+    @Test
+    public void testRemoverCompradorNaoExistente() {
+        Comprador comprador = new Comprador(1, "Fulano", "fulano@example.com", "senha", "comprador", "123456789", "Rua A");
+
+        String saidaEsperada = "Usuário Comprador não encontrado \n";
+        String saidaAtual = comprador.remover(listaDeCompradores);
+
+        Assertions.assertEquals(saidaEsperada, saidaAtual);
+    }
 
     @Test
-    public void testarListarComprador() {
+    public void testListarComprador() {
         Comprador comprador1 = new Comprador(1, "Fulano", "fulano@example.com", "senha", "comprador", "123456789", "Rua A");
         Comprador comprador2 = new Comprador(2, "Ciclano", "ciclano@example.com", "senha", "comprador", "987654321", "Rua B");
         listaDeCompradores.add(comprador1);
@@ -318,10 +379,9 @@ public class Testes {
         Produto produto1 = new Produto(1, "Camiseta", 10, 29.99, "Vestuário", "Nike");
         Produto produto2 = new Produto(2, "Calça", 5, 59.99, "Vestuário", "Adidas");
         listaDeProdutos.add(produto1);
-        listaDeProdutos.add(produto2);
 
         Produto novoProduto = new Produto(3, "Jaqueta", 8, 79.99, "Vestuário", "Puma");
-        String resultado = produto1.atualizar(novoProduto, listaDeProdutos);
+        String resultado = produto2.atualizar(novoProduto, listaDeProdutos);
         assertEquals("Produto não encontrado\n", resultado);
     }
 
@@ -367,5 +427,48 @@ public class Testes {
         String resultado = produto.toString();
         assertEquals("Produto [id=1, descricao=Camiseta, quantidade=10, valor=29.99, tipo=Vestuário, marca=Nike]", resultado);
     }
+    //FIM DOS TESTES PARA PRODUTO
+    
+    //TESTES PARA SERIALIZACAO:
+    @Test
+    public void testGravarArquivo() {
+        ArrayList<Object> lista = new ArrayList<>();
+        lista.add("Item 1");
+        lista.add("Item 2");
+        String nomeArquivo = "test.arq";
+
+        Serializacao.gravarArquivo(lista, nomeArquivo);
+
+        File arquivo = new File(nomeArquivo);
+        Assertions.assertTrue(arquivo.exists());
+    }
+    
+    @Test
+    public void testLerArquivo() {
+        ArrayList<Object> listaEsperada = new ArrayList<>();
+        listaEsperada.add("Item 1");
+        listaEsperada.add("Item 2");
+        String nomeArquivo = "teste.arq";
+
+        Serializacao.gravarArquivo(listaEsperada, nomeArquivo);
+
+        ArrayList<Object> listaAtual = Serializacao.lerArquivo(nomeArquivo);
+
+        Assertions.assertEquals(listaEsperada, listaAtual);
+    }
+    
+    @Test
+    public void testGravarArquivo_IOException() throws IOException {
+        ArrayList<Object> lista = new ArrayList<>();
+        String nomeArquivo = "readonly.arq";
+
+        // Altere a permissão do arquivo para somente leitura
+        File arquivo = new File(nomeArquivo);
+        arquivo.setReadOnly();
+
+        Serializacao.gravarArquivo(lista, nomeArquivo);
+    }
+    
+    //FIM DOS TESTES PARA SERIALIZACAO
     
 }

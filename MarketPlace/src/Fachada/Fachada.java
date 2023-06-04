@@ -10,7 +10,7 @@ public class Fachada {
     private static ArrayList<Comprador> listaCompradores = new ArrayList<>();
     private static ArrayList<Loja> listaLojas = new ArrayList<>();
 	private static int id = 1; //Id para Lojas e compradores
-	private static ArrayList<Object> listaDeObjetos = new ArrayList<>();
+	public static ArrayList<Object> listaDeObjetos = new ArrayList<>();
 		
     public Fachada(){}
 
@@ -33,7 +33,7 @@ public class Fachada {
 
     public void listarCompradores(){
         for(Comprador comprador : listaCompradores){
-            System.out.println(" Nome : " + comprador.getNome());
+            System.out.println("Nome : " + comprador.getNome());
             System.out.println("Email : " + comprador.getEmail());
             System.out.println("-------------------------");
         }

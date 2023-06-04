@@ -24,12 +24,13 @@ public class MarketPlace {
 		System.out.println("MENU");
 		System.out.println("1- Login");
 		System.out.println("2- Cadastrar comprador");
-		System.out.println("2- Cadastrar loja");
+		System.out.println("3- Cadastrar loja");
 
 		int comando = 0;
 		
 		try {
 			comando = sc.nextInt();
+			sc.nextLine(); // Consumir a linha pendente
 		}catch(InputMismatchException exception) {
 			System.out.println("Comando inválido");
 		}
@@ -37,9 +38,11 @@ public class MarketPlace {
 		switch(comando) {
 			case 2:
 				cadastrarComprador();
+				break; // revisar
+			case 3:
+				cadastrarLoja();
+				break; // revisar
 		}
-		cadastrarComprador();
-		cadastrarLoja();
 	}
 	
 	private static void cadastrarComprador() {

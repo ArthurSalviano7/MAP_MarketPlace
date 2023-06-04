@@ -79,4 +79,33 @@ public class Fachada {
         loja.cadastrar(listaLojas);
         id++;
     }
+
+    public static void atualizarComprador(int id,String nome,String email,String senha,String cpf,String endereco ){
+        Comprador novoComprador = new Comprador(id, nome, email, senha, senha, cpf, endereco);
+        String dadosAtualizados = novoComprador.atualizar(novoComprador,listaCompradores);
+        
+        System.out.println(dadosAtualizados);
+    }
+
+    public static void atualizarLoja(int id,String nome,String email,String senha,String cnpj,String endereco){
+        Loja novaLoja = new Loja(id, nome, email, senha, senha, cnpj, cnpj, endereco);
+        String dadosAtualizados = novaLoja.atualizar(novaLoja, listaLojas);
+
+        System.out.println(dadosAtualizados);
+    }
+
+    public static String removerComprador (int id,ArrayList<Comprador> listaDeCompradores){ // Revisar
+        Comprador comprador = new Comprador();
+        comprador.setId(id);
+        return comprador.remover(listaCompradores);     
+    }
+
+    public static String removerLoja(int id, ArrayList<Loja> listaDeLojas){ // Revisar
+        Loja loja = new Loja();
+        loja.setId(id);
+        return loja.remover(listaDeLojas);
+    }
+
+    
+
  }

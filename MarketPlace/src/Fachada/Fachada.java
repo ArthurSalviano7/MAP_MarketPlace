@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public class Fachada {
-    private static ArrayList<Comprador> listaCompradores = new ArrayList<>();
+    public static ArrayList<Comprador> listaCompradores = new ArrayList<>();
     private static ArrayList<Loja> listaLojas = new ArrayList<>();
 	private static int id = 1; //Id para Lojas e compradores
 	public static ArrayList<Object> listaDeObjetos = new ArrayList<>();

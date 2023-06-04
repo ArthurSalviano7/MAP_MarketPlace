@@ -117,12 +117,18 @@ public class Testes {
     
     @Test
     public void testListarCompradores() {
-    	String saidaEsperada = "Nome : Nome\nEmail : email@exemplo.com\n-------------------------\n"
-                + "Nome : Comprador Teste\nEmail : jose@gmail.com\n-------------------------\n";
+    	fachada.listaCompradores.clear();
+    	Comprador comprador = new Comprador(1, "Nome", "email@exemplo.com", "senha", "Comprador", "CPF", "Endereço");
+    	Comprador comprador2 = new Comprador(2, "Comprador Teste", "jose@gmail.com", "senha", "Comprador", "CPF", "Endereço");
+
+    	fachada.listaCompradores.add(comprador);
+    	fachada.listaCompradores.add(comprador2);
+    	String saidaEsperada = "Nome : Nome\r\nEmail : email@exemplo.com\r\n-------------------------\r\n"
+                + "Nome : Comprador Teste\r\nEmail : jose@gmail.com\r\n-------------------------\r\n";
     	ByteArrayOutputStream saidaAtual = new ByteArrayOutputStream();
         System.setOut(new PrintStream(saidaAtual));
         
-    	fachada.listarCompradores();        
+    	fachada.listarCompradores();
         System.setOut(System.out);
 
     	
@@ -296,17 +302,18 @@ public class Testes {
 
     @Test
     public void testListarComprador() {
+    	fachada.listaCompradores.clear();
         Comprador comprador1 = new Comprador(1, "Fulano", "fulano@example.com", "senha", "comprador", "123456789", "Rua A");
         Comprador comprador2 = new Comprador(2, "Ciclano", "ciclano@example.com", "senha", "comprador", "987654321", "Rua B");
         listaDeCompradores.add(comprador1);
         listaDeCompradores.add(comprador2);
 
-        String saidaEsperada = "Lista de Compradores:\nID -> Nome do Usuário -> Email\n1 -> Fulano -> fulano@example.com\n2 -> Ciclano -> ciclano@example.com\n";
+        String saidaEsperada = "Lista de Compradores:\r\nID -> Nome do Usuário -> Email\r\n1 -> Fulano -> fulano@example.com\r\n2 -> Ciclano -> ciclano@example.com\r\n";
         ByteArrayOutputStream saidaAtual = new ByteArrayOutputStream();
         System.setOut(new PrintStream(saidaAtual));
 
         comprador1.listar(listaDeCompradores);
-
+        
         Assertions.assertEquals(saidaEsperada, saidaAtual.toString());
     }
     

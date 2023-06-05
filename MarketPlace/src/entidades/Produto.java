@@ -2,6 +2,7 @@ package entidades;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import Fachada.Fachada;
 
 
 public class Produto implements IFCrud<Produto>, Serializable{
@@ -21,6 +22,14 @@ public class Produto implements IFCrud<Produto>, Serializable{
 	private String marca;
 	
 	public Produto() {}
+	
+	public Produto(String descricao, int quantidade, double valor, String tipo, String marca) {
+		this.descricao = descricao;
+		this.quantidade = quantidade;
+		this.valor = valor;
+		this.tipo = tipo;
+		this.marca = marca;
+	}
 	
 	public Produto(int id, String descricao, int quantidade, double valor, String tipo, String marca) {
 		this.id = id;
@@ -82,10 +91,10 @@ public class Produto implements IFCrud<Produto>, Serializable{
 	//CRUD Produto:
 	
 	//Cadastra o próprio objeto produto na loja especificada
-	public void cadastrar(ArrayList<Produto> listaDeProdutos) {
+	public void cadastrar() {
 		this.setId(idProduto);
 		idProduto++;
-		listaDeProdutos.add(this);
+		Fachada.listaProdutos.add(this);
 		System.out.println("Produto cadastrado com sucesso");
 	}
 	
@@ -128,12 +137,12 @@ public class Produto implements IFCrud<Produto>, Serializable{
 		return "Produto não encontrado\n";
 	}
 
-	public String remover(ArrayList<Produto> listaDeProdutos) {
-		for(int i = 0; i < listaDeProdutos.size(); i++){
-			int idDoProduto = listaDeProdutos.get(i).getId();
+	public String remover() {
+		for(int i = 0; i < Fachada.listaProdutos.size(); i++){
+			int idDoProduto = Fachada.listaProdutos.get(i).getId();
 
 			if (idDoProduto == this.id){
-				listaDeProdutos.remove(i);
+				Fachada.listaProdutos.remove(i);
 				return "Produto removido\n";
 			}
 		}

@@ -2,6 +2,7 @@ package entidades;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import Fachada.Fachada;
 
 public class Comprador implements IFCrud<Comprador>, Serializable{
 	
@@ -134,17 +135,17 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
 	//CRUD Comprador:
 
 		//Cadastra o próprio objeto Comprador na lista especificada
-		public void cadastrar(ArrayList<Comprador> listaDeCompradores) {
-			listaDeCompradores.add(this); //A atualização do Id ocorre na classe Fachada
+		public void cadastrar() {
+			Fachada.listaCompradores.add(this); //A atualização do Id ocorre na classe Fachada
 			System.out.println("Usuário Comprador cadastrado com sucesso");
 		}
 
 		//Exibe o Comprador pelo ID
-		public String exibir(int id, ArrayList<Comprador> listaDeCompradores) { 
+		public String exibir(int id, ArrayList<Comprador> listaCompradores) { 
 
-			for(int i = 0; i < listaDeCompradores.size(); i++){
-				if (listaDeCompradores.get(i).getId() == id) {
-					return listaDeCompradores.get(i).toString();
+			for(int i = 0; i < listaCompradores.size(); i++){
+				if (listaCompradores.get(i).getId() == id) {
+					return listaCompradores.get(i).toString();
 				}
 			}
 
@@ -163,26 +164,26 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
 			return "Usuário Comprador não foi encontrado na busca \n";
 		}
 
-		//Atualiza o Comprador ao passar o id original, o novo usuário já atualizada e a lista de compradores
-		public String atualizar(Comprador novoComprador, ArrayList<Comprador> listaDeCompradores) {
+		//Atualiza o Comprador o novo usuário já atualizada e a lista de compradores
+		public String atualizar(Comprador novoComprador) {
 
-			for(int i = 0; i < listaDeCompradores.size(); i++){
-				int idDoComprador = listaDeCompradores.get(i).getId();
+			for(int i = 0; i < Fachada.listaCompradores.size(); i++){
+				int idDoComprador = Fachada.listaCompradores.get(i).getId();
 
 				if (idDoComprador == this.id){
-					listaDeCompradores.set(i, novoComprador);
+					Fachada.listaCompradores.set(i, novoComprador);
 					return "Usuário Comprador atualizado com sucesso \n";
 				}
 			}
 			return "Usuário Comprador não encontrado\n";
 		}
 
-		public String remover(ArrayList<Comprador> listaDeCompradores) {
-			for(int i = 0; i < listaDeCompradores.size(); i++){
-				int idDoComprador = listaDeCompradores.get(i).getId();
+		public String remover() {
+			for(int i = 0; i < Fachada.listaCompradores.size(); i++){
+				int idDoComprador = Fachada.listaCompradores.get(i).getId();
 
 				if (idDoComprador == this.id){
-					listaDeCompradores.remove(i);
+					Fachada.listaCompradores.remove(i);
 					return "Usuário Comprador removido \n";
 				}
 			}

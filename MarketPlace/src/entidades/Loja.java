@@ -2,6 +2,7 @@ package entidades;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import Fachada.Fachada;
 
 public class Loja implements IFCrud<Loja>, Serializable{
 	
@@ -143,8 +144,8 @@ public class Loja implements IFCrud<Loja>, Serializable{
 	//CRUD Loja:
 
 	//Cadastra o próprio objeto Loja na lista especificada
-	public void cadastrar(ArrayList<Loja> listaDeLojas) {
-		listaDeLojas.add(this); //A atualização do Id ocorre na classe Fachada
+	public void cadastrar() {
+		Fachada.listaLojas.add(this); //A atualização do Id ocorre na classe Fachada
 		System.out.println("Loja cadastrada com sucesso");
 	}
 
@@ -173,25 +174,25 @@ public class Loja implements IFCrud<Loja>, Serializable{
 	}
 
 	//Atualiza a loja através do id original, a nova loja já atualizada e a lista de lojas
-	public String atualizar(Loja novaLoja, ArrayList<Loja> listaDeLojas) {
+	public String atualizar(Loja novaLoja) {
 
-		for(int i = 0; i < listaDeLojas.size(); i++){
-			int idDaLoja = listaDeLojas.get(i).getId();
+		for(int i = 0; i < Fachada.listaLojas.size(); i++){
+			int idDaLoja = Fachada.listaLojas.get(i).getId();
 
 			if (idDaLoja == this.id){
-				listaDeLojas.set(i, novaLoja);
+				Fachada.listaLojas.set(i, novaLoja);
 				return "Loja atualizada com sucesso \n";
 			}
 		}
 		return "Loja não encontrada\n";
 	}
 
-	public String remover(ArrayList<Loja> listaDeLojas) {
-		for(int i = 0; i < listaDeLojas.size(); i++){
-			int idDaLoja = listaDeLojas.get(i).getId();
+	public String remover() {
+		for(int i = 0; i < Fachada.listaLojas.size(); i++){
+			int idDaLoja = Fachada.listaLojas.get(i).getId();
 
 			if (idDaLoja == this.id){
-				listaDeLojas.remove(i);
+				Fachada.listaLojas.remove(i);
 				return "Loja removida \n";
 			}
 		}

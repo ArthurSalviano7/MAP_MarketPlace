@@ -69,25 +69,28 @@ public class Testes {
         comprador.setTipoUsuario("Comprador");
         comprador.setCpf("12345678911");
         comprador.setEndereco("Endereço");
-        fachada.cadastrarComprador(comprador.getNome(), comprador.getEmail(), comprador.getSenha(), comprador.getCpf(), comprador.getEndereco());
+        fachada.listaDeObjetos.add(comprador);
+        Serializacao.gravarArquivo(fachada.listaDeObjetos, "Arquivo teste autenticar");
         
         String mensagem = fachada.autenticar("jose@gmail.com", "1234");
-        Assertions.assertEquals("Usuário autenticado com sucesso!!", mensagem);
+        Assertions.assertEquals("Comprador autenticado", mensagem);
     }
 
     @Test
     public void testAutenticarLojaAutenticada() {
         Loja loja = new Loja(1, "PetStore", "petstore@outlook.com", "54321", "Loja", "CNPJ", "CPF", "Endereço", 5.0, "Conceito");
-        fachada.cadastrarLoja(loja.getNome(), loja.getEmail(), loja.getSenha(), loja.getCnpj(), loja.getCpf(), loja.getEndereco());
+        fachada.listaDeObjetos.add(loja);
 
 
-        fachada.autenticar("petstore@outlook.com", "54321");
+        String mensagem = fachada.autenticar("petstore@outlook.com", "54321");
+        Assertions.assertEquals("Loja autenticada", mensagem);
+
     }
 
     @Test
     public void testAutenticarUsuarioNaoCadastrado() {
     	String mensagem = fachada.autenticar("emailNãoExistente@exemplo.com", "senha");
-        Assertions.assertEquals("Usuário não cadastrado!!", mensagem);
+        Assertions.assertEquals("não autenticado", mensagem);
     }
 
     @Test
@@ -141,7 +144,7 @@ public class Testes {
     //TESTES PARA LOJA:
     @Test
     public void testCadastrarLoja() {
-        loja.cadastrar(listaDeLojas);
+        loja.cadastrar();
         Assertions.assertEquals(1, listaDeLojas.size());
         Assertions.assertEquals(loja, listaDeLojas.get(0));
     }
@@ -164,7 +167,7 @@ public class Testes {
     public void testAtualizarLoja() {
         listaDeLojas.add(loja);
         Loja novaLoja = new Loja(1, "Nova Loja", "nova@teste.com", "novasenha", "Novo Tipo", "987654321", "987654321", "Novo Endereço", 3.8, "Ruim");
-        String mensagem = loja.atualizar(novaLoja, listaDeLojas);
+        String mensagem = loja.atualizar(novaLoja);
         Assertions.assertEquals("Loja atualizada com sucesso \n", mensagem);
         Assertions.assertEquals(novaLoja, listaDeLojas.get(0));
     }
@@ -172,7 +175,7 @@ public class Testes {
     @Test
     public void testRemoverLoja() {
         listaDeLojas.add(loja);
-        String mensagem = loja.remover(listaDeLojas);
+        String mensagem = loja.remover();
         Assertions.assertEquals("Loja removida \n", mensagem);
         Assertions.assertEquals(0, listaDeLojas.size());
     }
@@ -180,7 +183,7 @@ public class Testes {
     @Test
     public void testListarLoja() {
         listaDeLojas.add(loja);
-        Loja outraLoja = new Loja(2, "Loja 2", "loja2@teste.com", "senha456", "Tipo", "987654321", "987654321", "Endereço 2", 4.2, "Bom");
+        Loja outraLoja = new Loja(2, "Loja 2", "loja2@teste.com", "senha456", "Tipo", "987654321", "987654321", "Endereço 2");
         listaDeLojas.add(outraLoja);
         loja.listar(listaDeLojas);
     }
@@ -200,10 +203,10 @@ public class Testes {
     @Test
     public void testCadastrarComprador(){
         Comprador comprador = new Comprador(1, "John Doe", "john@example.com", "password", "buyer", "123456789", "123 Street");
-        comprador.cadastrar(listaDeCompradores);
+        comprador.cadastrar();
 
-        Assertions.assertEquals(1, listaDeCompradores.size());
-        Assertions.assertEquals(comprador, listaDeCompradores.get(0));
+        Assertions.assertEquals(1, Fachada.listaCompradores.size());
+        Assertions.assertEquals(comprador, Fachada.listaCompradores.get(0));
 
     }
     @Test
@@ -260,7 +263,7 @@ public class Testes {
         listaDeCompradores.add(comprador1);
 
         String expectedOutput = "Usuário Comprador atualizado com sucesso \n";
-        String actualOutput = comprador1.atualizar(comprador2, listaDeCompradores);
+        String actualOutput = comprador1.atualizar(comprador2);
 
         Assertions.assertEquals(expectedOutput, actualOutput);
         Assertions.assertEquals(comprador2, listaDeCompradores.get(0));
@@ -273,7 +276,7 @@ public class Testes {
         listaDeCompradores.add(comprador1);
 
         String expectedOutput = "Usuário Comprador não encontrado\n";
-        String actualOutput = comprador2.atualizar(comprador1, listaDeCompradores);
+        String actualOutput = comprador2.atualizar(comprador1);
 
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
@@ -284,7 +287,7 @@ public class Testes {
         listaDeCompradores.add(comprador);
 
         String saidaEsperada = "Usuário Comprador removido \n";
-        String saidaAtual = comprador.remover(listaDeCompradores);
+        String saidaAtual = comprador.remover();
 
         Assertions.assertEquals(saidaEsperada, saidaAtual);
         Assertions.assertEquals(0, listaDeCompradores.size());
@@ -295,7 +298,7 @@ public class Testes {
         Comprador comprador = new Comprador(1, "Fulano", "fulano@example.com", "senha", "comprador", "123456789", "Rua A");
 
         String saidaEsperada = "Usuário Comprador não encontrado \n";
-        String saidaAtual = comprador.remover(listaDeCompradores);
+        String saidaAtual = comprador.remover();
 
         Assertions.assertEquals(saidaEsperada, saidaAtual);
     }
@@ -323,7 +326,7 @@ public class Testes {
     @Test
     public void testCadastrarProduto() {
         Produto produto = new Produto(1, "Camiseta", 10, 29.99, "Vestuário", "Nike");
-        produto.cadastrar(listaDeProdutos);
+        produto.cadastrar();
         assertEquals(1, listaDeProdutos.size());
         assertEquals(1, produto.getId());
     }
@@ -399,7 +402,7 @@ public class Testes {
         listaDeProdutos.add(produto1);
         listaDeProdutos.add(produto2);
 
-        String resultado = produto1.remover(listaDeProdutos);
+        String resultado = produto1.remover();
         assertEquals("Produto removido\n", resultado);
         assertEquals(1, listaDeProdutos.size());
     }
@@ -412,7 +415,7 @@ public class Testes {
         listaDeProdutos.add(produto2);
 
         Produto produto3 = new Produto(3, "Jaqueta", 8, 79.99, "Vestuário", "Puma");
-        String resultado = produto3.remover(listaDeProdutos);
+        String resultado = produto3.remover();
         assertEquals("Produto não encontrado \n", resultado);
         assertEquals(2, listaDeProdutos.size());
     }

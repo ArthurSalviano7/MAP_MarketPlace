@@ -18,9 +18,12 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
 	private String cpf; // pode ser um inteiro talvez
 	private String endereco;
 	private double pontuacao;
+	private Carrinho carrinho;
 	private ArrayList<Produto> listaHistorico = new ArrayList<>();
 	
-	public Comprador() {}
+	public Comprador() {
+		carrinho = new Carrinho(); // Quando criar um comprador um carrinho será associado a ele
+	}
 	
 	public Comprador (int id, String nome,String email,String senha,String tipoUsuario,String cpf,String endereco) {
 		this.id = id;
@@ -43,6 +46,9 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
 		this.endereco = endereco;
 		this.pontuacao = pontuacao;
 	}
+	
+
+
 	
 	public int getId() {
 		return id;
@@ -106,6 +112,14 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
 	
 	public void setPontuacao(double pontuacao) {
 		this.pontuacao = pontuacao;
+	}
+
+	public Carrinho getCarrinho(){
+		return carrinho;
+	}
+
+	public void setCarrinho(Carrinho carrinho){
+		this.carrinho = carrinho;
 	}
 	
 	public String toString(){

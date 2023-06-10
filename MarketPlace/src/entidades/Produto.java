@@ -10,7 +10,7 @@ public class Produto implements IFCrud<Produto>, Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 10L;
 
 	private static int idProduto = 1;
 	
@@ -124,13 +124,13 @@ public class Produto implements IFCrud<Produto>, Serializable{
 	}
 
 	//Atualiza o produto através do id original, o novo produto já atualizado e a lista de produtos
-	public String atualizar(Produto novoProduto, ArrayList<Produto> listaDeProdutos) {
+	public String atualizar(Produto novoProduto) {
 
-		for(int i = 0; i < listaDeProdutos.size(); i++){
-			int idDoProduto = listaDeProdutos.get(i).getId();
+		for(int i = 0; i < Fachada.listaProdutos.size(); i++){
+			int idDoProduto = Fachada.listaProdutos.get(i).getId();
 
 			if (idDoProduto == this.id){
-				listaDeProdutos.set(i, novoProduto);
+				Fachada.listaProdutos.set(i, novoProduto);
 				return "Produto atualizado\n";
 			}
 		}
@@ -150,12 +150,13 @@ public class Produto implements IFCrud<Produto>, Serializable{
 	}
 
 	public void listar(ArrayList<Produto> listaDeProdutos) {
-		System.out.println("Lista de Produtos: \n");
+		System.out.println("\nLista de Produtos: \n");
 		System.out.println("ID -> Descricao -> Valor");
 
 		for(Produto produto : listaDeProdutos) {
 			System.out.println(produto.getId() + " -> " + produto.getDescricao() + " -> R$" + produto.getValor());
 		}
+		System.out.println();
 	}
 	
 	@Override

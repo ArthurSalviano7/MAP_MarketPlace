@@ -9,7 +9,7 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 30L;
 	private int id;
 	private String nome;
 	private String email;

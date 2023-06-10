@@ -14,7 +14,6 @@ public class MarketPlace {
 	
 	public static void main(String[] args) {
 		
-		
 		menu();
 		sc.close();
 	
@@ -43,10 +42,10 @@ public class MarketPlace {
 				Login();
 			case 2:
 				cadastrarComprador();
-				break; // revisar
+				break;
 			case 3:
 				cadastrarLoja();
-				break; // revisar
+				break; 
 			default:
 				System.out.println("Comando inválido");
 				menu();

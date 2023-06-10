@@ -65,27 +65,27 @@ public class Fachada {
 		System.out.println("");
 		System.out.println("Insira uma opcao:");
 		
-		int comando = 0;
+		int comandoComprador = 0;
 		
 		try {
-			comando = sc.nextInt();
+			comandoComprador = sc.nextInt();
 			sc.nextLine(); // Consumir a linha pendente
 		}catch(InputMismatchException exception) {
 			System.out.println("Comando inválido");
 			menuDoComprador();
 		}
 		
-		switch(comando) {
+		switch(comandoComprador) {
 			case 1:
 				listarProdutos();
 				break;
 			case 2:
 				menuContaComprador();
-				break; // revisar
+				break;
 			case 3:
-				System.out.println("Sistema Encerrado!");
+				System.out.println("Logout efetuado !!");
 				MarketPlace.menu();
-				break; // revisar
+				break;
 			default:
 				System.out.println("Comando inválido");
 				menuDoComprador();
@@ -96,7 +96,6 @@ public class Fachada {
     public static void menuDaLoja() {
     	lerObjetos();
     	recuperarID();
-    	
     	
     	System.out.println("MENU LOJA");
 		System.out.println("1- Cadastrar Produto");
@@ -110,16 +109,17 @@ public class Fachada {
 		System.out.println("");
 		System.out.println("Insira uma opcao:");
 		
-		int comando = 0;
+		int comandoLoja = 0;
 		
 		try {
-			comando = sc.nextInt();
+			comandoLoja = sc.nextInt();
 			sc.nextLine(); // Consumir a linha pendente
 		}catch(InputMismatchException exception) {
 			System.out.println("Comando inválido");
 			menuDaLoja();
 		}
 		
+		//Criar Loja para realizar as operações
 		Loja loja = new Loja();
 		
 		for(Loja lojaAux : listaLojas) {
@@ -127,9 +127,12 @@ public class Fachada {
 				loja = lojaAux;
 			}
 		}
+		Produto auxProduto = new Produto(); 
+		int idProduto = 0;
 		
-		switch(comando) {
+		switch(comandoLoja) {
 			case 1:
+				//Cadastrar Produto:
 				System.out.println("Insira a descricao do produto: ");
 				String descricao = sc.nextLine();
 				System.out.println("Insira a quantidade do produto: ");
@@ -147,29 +150,289 @@ public class Fachada {
 				produto.cadastrar();
 				
 				loja.setListaDeProdutos(listaProdutos);
-				System.out.println("Produto Cadastrado!!");
 				gravarObjetos();
 				menuDaLoja();
-				break;
+				break; //Fim de Cadastrar Produto
 			case 2:
-				menuContaComprador();
-				break; // revisar
+				//Exibir Produto:
+				System.out.print("Insira o Id do produto a ser exibido: ");
+				try {
+					idProduto = sc.nextInt();
+					sc.nextLine();
+				} catch (InputMismatchException exception) {
+					System.out.println("ID inválido!");
+					menuDaLoja();
+				}
+				
+				System.out.println(auxProduto.exibir(idProduto, loja.getListaDeProdutos()));
+				menuDaLoja();
+				break; //Fim de Exibir Produto
 			case 3:
-				System.out.println("Sistema Encerrado!");
-				System.exit(0);
-				break; // revisar
+				//Atualizar Produto:
+				loja.listarProdutos();
+				System.out.println("Informe o Id do produto que deseja atualizar");
+				try {
+					idProduto = sc.nextInt();
+					sc.nextLine();
+				} catch (InputMismatchException exception) {
+					System.out.println("ID inválido!");
+					menuDaLoja();
+				}
+				
+				//Se o produto não está cadastrado na loja volta para o menu
+				if (auxProduto.exibir(idProduto, loja.getListaDeProdutos()) == "Produto não encontrado\n"){
+					System.out.println("Produto não encontrado na loja!");
+					menuDaLoja();
+				}else {
+					//Atualizar Produto:
+					//Copia as informações do produto em questão para realizar as alterações
+					listaProdutos = loja.getListaDeProdutos();
+					
+					for(Produto prod : loja.getListaDeProdutos()) {
+						if(prod.getId() == idProduto) {
+							auxProduto = prod;
+						}
+					}
+					
+					System.out.println("Qual informação do produto deseja atualizar: ");
+					System.out.println("1- Descricao");
+					System.out.println("2- Quantidade");
+					System.out.println("3- Valor");
+					System.out.println("4- Tipo de produto");
+					System.out.println("5- Marca");
+					
+					int comandoProduto = 0;
+					try {
+						comandoProduto = sc.nextInt();
+						sc.nextLine();
+					} catch (InputMismatchException exception) {
+						System.out.println("comando inválido!");
+						menuDaLoja();
+					}
+					
+					switch(comandoProduto) {
+						case 1:
+							System.out.println("Insira a nova descricao: ");
+							String novaDescricao = sc.nextLine();
+							auxProduto.setDescricao(novaDescricao);
+							
+							System.out.println(auxProduto.atualizar(auxProduto));
+							loja.setListaDeProdutos(listaProdutos);
+							gravarObjetos();
+							menuDaLoja();
+							break;	
+						case 2:
+							System.out.println("Insira a nova quantidade: ");
+							int novaQuantidade = sc.nextInt();
+							auxProduto.setQuantidade(novaQuantidade);
+							
+							System.out.println(auxProduto.atualizar(auxProduto));
+							loja.setListaDeProdutos(listaProdutos);
+							gravarObjetos();
+							menuDaLoja();
+							break;
+						case 3:
+							System.out.println("Insira o novo valor: ");
+							double novoValor = sc.nextDouble();
+							auxProduto.setValor(novoValor);
+							
+							System.out.println(auxProduto.atualizar(auxProduto));
+							loja.setListaDeProdutos(listaProdutos);
+							gravarObjetos();
+							menuDaLoja();
+							break;
+						case 4:
+							System.out.println("Insira o novo tipo para o produto: ");
+							String novoTipo = sc.nextLine();
+							auxProduto.setTipo(novoTipo);
+							
+							System.out.println(auxProduto.atualizar(auxProduto));
+							loja.setListaDeProdutos(listaProdutos);
+							gravarObjetos();
+							menuDaLoja();
+							break;
+						case 5:
+							System.out.println("Insira a nova marca para o produto: ");
+							String novaMarca = sc.nextLine();
+							auxProduto.setTipo(novaMarca);
+							
+							System.out.println(auxProduto.atualizar(auxProduto));
+							loja.setListaDeProdutos(listaProdutos);
+							gravarObjetos();
+							menuDaLoja();
+							break;
+						default:
+							System.out.println("Comando inválido!");
+							menuDaLoja();
+					}//Fim do switch informações do produto
+				}
+				menuDaLoja();
+				break;//Fim de Atualizar Produto 
+			
+			case 4:
+				//Buscar Produto:
+				System.out.println("Insira o nome do produto que deseja buscar: ");
+				String nomeBuscado = sc.nextLine();
+				
+				System.out.println(auxProduto.buscar(nomeBuscado, loja.getListaDeProdutos()));
+				menuDaLoja();
+				break; // Fim de Buscar Produto
+			case 5:
+				//Remover Produto:
+				listaProdutos = loja.getListaDeProdutos();
+				loja.listarProdutos();
+				
+				System.out.println("Insira o id do produto que deseja remover: ");
+				int idRemover = sc.nextInt();
+				sc.nextLine();
+				
+				auxProduto.setId(idRemover);
+				
+				System.out.println(auxProduto.remover());
+				menuDaLoja();
+				break; // Fim de Remover Produto
 			case 6:
+				//Listar Produtos:
 				loja.listarProdutos();
 				menuDaLoja();
-				break; 
+				break; // Fim de listar produtos
+			case 7:
+				//Configurar Conta:
+				menuContaLoja();
+				menuDaLoja();
+				break;
+			case 8:
+				//Sair:
+				System.out.println("Logout efetuado!");
+				MarketPlace.menu();
+				break;
 			default:
 				System.out.println("Comando inválido");
-				menuDoComprador();
+				menuDaLoja();
+				break;
 	}
 		
     }//Fim do metodo menuDaLoja()
     
+    public static void menuContaLoja() {
+    	lerObjetos();
+    	recuperarID();
+    	
+		System.out.println("MENU LOJA - CONFIGURAR CONTA");
+		System.out.println("1- Exibir informações da conta");
+		System.out.println("2- Mudar Nome");
+		System.out.println("3- Mudar Email");
+		System.out.println("4- Mudar Senha");
+		System.out.println("5- Mudar Endereco");
+		System.out.println("6- Excluir Conta");
+		System.out.println("7- Sair");
+		System.out.println("");
+		System.out.println("Insira uma opcao:");
+		
+		int comando = 0;
+		
+		try {
+			comando = sc.nextInt();
+			sc.nextLine(); // Consumir a linha pendente
+		}catch(InputMismatchException exception) {
+			System.out.println("Comando inválido");
+			menuContaLoja();
+		}
+		
+		Loja loja = new Loja();
+		
+		for(Loja auxLoja : listaLojas) {
+			if(auxLoja.getId() == idDoUsuarioAtual) {
+				loja = auxLoja;
+			}
+		}
+		
+		switch(comando) {
+			case 1:
+				//Exibir informaçoes:
+				System.out.println(loja.exibir(idDoUsuarioAtual, listaLojas));
+				menuContaLoja();
+				break;
+			case 2:
+				//Mudar nome:
+				System.out.print("Insira o novo nome desejado: ");
+				String novoNome = sc.nextLine();
+				
+				loja.setNome(novoNome);
+				
+				loja.atualizar(loja);
+				gravarObjetos(); //Todas as alterações precisam ser gravadas no arquivo
+				System.out.println("Nome atualizado!!");
+				menuContaLoja();
+				break; // Fim de Mudar Nome
+			case 3:
+				//Mudar email:
+				System.out.print("Insira o novo email desejado: ");
+				String novoEmail = sc.nextLine();
+				//VerificarEmail(novoEmail);
+				
+				loja.setEmail(novoEmail);
+				
+				loja.atualizar(loja);
+				gravarObjetos();
+				System.out.println("Email atualizado!!");
+				menuContaLoja();
+				break; // Fim de Mudar Email
+			case 4:
+				//Mudar senha:
+				System.out.print("Insira a nova senha desejada: ");
+				String novaSenha = sc.nextLine();
+				
+				loja.setSenha(novaSenha);
+				
+				loja.atualizar(loja);
+				gravarObjetos();
+				System.out.println("Senha atualizada!!");
+				menuContaLoja();
+				break; // Fim de Mudar Senha
+			case 5:
+				//Mudar Endereço:
+				System.out.print("Insira o novo Endereco desejado: ");
+				String novoEndereco = sc.nextLine();
+				
+				loja.setEndereco(novoEndereco);
+				
+				loja.atualizar(loja);
+				gravarObjetos();
+				System.out.println("Endereco atualizado!!");
+				menuContaLoja();
+				break; // Fim de Mudar Endereco
+			case 6:
+				//Excluir Conta:
+				System.out.println("Tem certeza que deseja excluir a conta?");
+				System.out.println("1- SIM\n2- NAO");
+				int op = sc.nextInt();
+				sc.nextLine(); // Consumir a linha pendente
+
+				if (op == 1) {
+					System.out.println(loja.remover());
+					gravarObjetos();
+				}else if (op == 2) {
+					menuContaLoja();
+				}else {
+					System.out.println("Comando inválido");
+					menuContaLoja();
+				}
+				MarketPlace.menu();
+				break; // Fim de Excluir
+			case 7:
+				menuDaLoja();
+				break;
+			default:
+				System.out.println("Comando inválido");
+				menuContaLoja();
+		}
+	}//Fim do menuContaLoja()
+    
 	public static void menuContaComprador() {
+		lerObjetos();
+    	recuperarID();
+		
 		System.out.println("MENU COMPRADOR - CONFIGURAR CONTA");
 		System.out.println("1- Exibir informações da conta");
 		System.out.println("2- Mudar Nome");
@@ -188,7 +451,7 @@ public class Fachada {
 			sc.nextLine(); // Consumir a linha pendente
 		}catch(InputMismatchException exception) {
 			System.out.println("Comando inválido");
-			menuDaLoja();
+			menuContaComprador();
 		}
 		
 		Comprador comprador = new Comprador();
@@ -234,7 +497,7 @@ public class Fachada {
 				
 				comprador.atualizar(comprador);
 				gravarObjetos();
-				System.out.println("Senha atualizada!!: " + comprador.toString());
+				System.out.println("Senha atualizada!!");
 				menuDoComprador();
 				break; // Fim de Mudar Senha
 			case 5:

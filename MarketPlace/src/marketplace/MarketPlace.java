@@ -59,17 +59,18 @@ public class MarketPlace {
 		System.out.print("Insira a senha: ");
 		String senha = sc.nextLine();
 		
-		if(fachada.autenticar(email, senha) == "Comprador autenticado") {
+		if(fachada.autenticar(email, senha).equals("Comprador autenticado")) {
 			System.out.println("Login realizado com sucesso!!");
 			System.out.println();
 			fachada.menuDoComprador();
 		}
-		else if(fachada.autenticar(email, senha) == "Loja autenticada") {
+		else if(fachada.autenticar(email, senha).equals("Loja autenticada")) {
 			System.out.println("Login realizado com sucesso!!");
 			System.out.println();
 			fachada.menuDaLoja();
 		}else {
-			System.out.println("Autenticação falhou!!");
+			System.out.println("-------------------");
+			System.out.println("Autenticação falhou!!\n");
 		}
 		
 		

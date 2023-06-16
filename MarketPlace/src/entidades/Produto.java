@@ -150,7 +150,6 @@ public class Produto implements IFCrud<Produto>, Serializable{
 	}
 
 	public void listar(ArrayList<Produto> listaDeProdutos) {
-		System.out.println("\nLista de Produtos: \n");
 		System.out.println("ID -> Descricao -> Valor");
 
 		for(Produto produto : listaDeProdutos) {

@@ -141,6 +141,7 @@ public class Fachada {
 			String marca = sc.nextLine();
 
 			Produto produto = new Produto(descricao, quantidade, valor, tipo, marca);
+			produto.setIdLoja(loja.getId());
 			produto.cadastrar();
 
 			ArrayList<Produto> produtosLoja = loja.getListaDeProdutos();
@@ -563,6 +564,37 @@ public class Fachada {
 		}
 	}
 
+	public static Loja getLojaPorId(int id) {
+    for (Loja loja : listaLojas) {
+        if (loja.getId() == id) {
+            return loja;
+        }
+    }
+    return null; // Retorna null se nenhuma loja for encontrada com o ID fornecido
+}	
+	
+	public static void listarProdutos() {
+    if (listaLojas.isEmpty()) {
+        System.out.println("Ainda não há lojas cadastradas!");
+        menuDoComprador();
+    } else {
+        for (Loja loja : listaLojas) {
+            System.out.println("\nLoja " + loja.getId() + " - Lista de Produtos" + ": \n");
+            List<Produto> produtosDaLoja = loja.getListaDeProdutos();
+            if (produtosDaLoja.isEmpty()) {
+                System.out.println("Não há produtos cadastrados nesta loja!");
+            } else {
+                for (Produto produto : produtosDaLoja) {
+                    System.out.println(produto.toString()); // Exibir as informações de cada produto
+                }
+            }
+        }
+        menuDoComprador();
+    }
+   }
+
+
+	/* 
 	public static void listarProdutos() {
 
 		if (listaLojas.isEmpty()) {
@@ -576,8 +608,8 @@ public class Fachada {
 			}
 			menuDoComprador();
 		}
-
 	}
+	*/
 
 	// Método para recuperar o Id de acordo com os objetos do arquivo
 	public static int recuperarID() {

@@ -13,7 +13,7 @@ public class MarketPlace {
 	static Fachada fachada = new Fachada();
 	
 	public static void main(String[] args) {
-		
+		Fachada.lerObjetos();
 		menu();
 		sc.close();
 	

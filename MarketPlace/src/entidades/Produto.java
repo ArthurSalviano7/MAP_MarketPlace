@@ -12,7 +12,7 @@ public class Produto implements IFCrud<Produto>, Serializable{
 	 */
 	private static final long serialVersionUID = 10L;
 
-	private static int idProduto = 1;
+	private static int idProduto = 0;
 	
 	private int id;
 	private String descricao;
@@ -20,6 +20,7 @@ public class Produto implements IFCrud<Produto>, Serializable{
 	private double valor;
 	private String tipo; //categoria do produto
 	private String marca;
+	private int idLoja;
 	
 	public Produto() {}
 	
@@ -87,16 +88,48 @@ public class Produto implements IFCrud<Produto>, Serializable{
 	public void setMarca(String marca) {
 		this.marca = marca;
 	}
+
+	public int getIdLoja(){
+		return idLoja;
+	}
 	
+	public void setIdLoja(int idLoja){
+		this.idLoja = idLoja;
+	}
+
+	private static int proximoId(){
+		idProduto++;
+		return idProduto;
+	}
 	//CRUD Produto:
 	
 	//Cadastra o próprio objeto produto na loja especificada
 	public void cadastrar() {
-		this.setId(idProduto);
-		idProduto++;
-		Fachada.listaProdutos.add(this);
-		System.out.println("Produto cadastrado com sucesso");
-	}
+    	this.setId(proximoId());
+    	Loja loja = Fachada.getLojaPorId(idLoja); // Obter a loja correspondente ao ID
+    	if (loja != null) {
+        	loja.getListaDeProdutos().add(this); // Adicionar o produto à lista de produtos da loja
+        	System.out.println("Produto cadastrado com sucesso");
+    } else {
+        System.out.println("Loja não encontrada");
+    }
+}
+
+
+	/* 
+	public void cadastrar() {
+    this.setId(idProduto);
+    idProduto++;
+    Loja loja = Fachada.getLojaPorId(idLoja); // Obter a loja correspondente ao ID
+    if (loja != null) {
+        loja.getListaDeProdutos().add(this); // Adicionar o produto à lista de produtos da loja
+        System.out.println("Produto cadastrado com sucesso");
+    } else {
+        System.out.println("Loja não encontrada");
+    }
+}
+	*/
+
 	
 	//Exibe o produto em determinada loja pelo id
 	public String exibir(int id, ArrayList<Produto> listaDeProdutos) { 

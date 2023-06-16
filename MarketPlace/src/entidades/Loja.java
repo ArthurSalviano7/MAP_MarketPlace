@@ -216,4 +216,16 @@ public class Loja implements IFCrud<Loja>, Serializable{
 			System.out.println(produto.getId() + " -> " + produto.getDescricao() + " -> R$" + produto.getValor());
 		}
 	}
+
+	public String toString(){
+        return "ID: " + id + "\n"
+                + "Nome: " + nome + "\n"
+                + "Email: " + email + "\n"
+                + "Senha: " + senha + "\n"
+                + "Tipo de Usuário: " + tipoUsuario + "\n"
+                + "CPF: " + cnpj + "\n"
+                + "Endereço: " + endereco +"\n";
+    }
+
+
 }

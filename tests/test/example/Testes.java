@@ -1,5 +1,6 @@
 package test.example;
 import Fachada.Fachada;
+import entidades.Carrinho;
 import entidades.Comprador;
 import entidades.Loja;
 import entidades.Produto;
@@ -171,7 +172,27 @@ public class Testes {
         Assertions.assertEquals("Loja atualizada com sucesso \n", mensagem);
         Assertions.assertEquals(novaLoja, listaDeLojas.get(0));
     }
+    
+    @Test
+    public void testRemoverLoja() {
+        // Caso 1: Lista vazia
+        String mensagemVazia = loja.remover();
+        Assertions.assertEquals("Loja n„o encontrada \n", mensagemVazia);
 
+        // Caso 2: Loja n„o encontrada
+        Loja outraLoja = new Loja(2, "Outra Loja", "outra@teste.com", "outrasenha", "Outro Tipo", "987654321", "987654321", "Outro EndereÁo", 4.2, "Bom");
+        listaDeLojas.add(outraLoja); // Adicione uma loja diferente da que vocÍ deseja remover
+        String mensagemNaoEncontrada = loja.remover();
+        Assertions.assertEquals("Loja n„o encontrada \n", mensagemNaoEncontrada);
+
+        // Caso 3: Loja encontrada e removida
+        listaDeLojas.add(loja);
+        String mensagemRemovida = listaDeLojas.get(0).remover();
+        Assertions.assertEquals("Loja removida \n", mensagemRemovida);
+        Assertions.assertEquals(0, listaDeLojas.size());
+    }
+	
+    /*
     @Test
     public void testRemoverLoja() {
         listaDeLojas.add(loja);
@@ -179,6 +200,7 @@ public class Testes {
         Assertions.assertEquals("Loja removida \n", mensagem);
         Assertions.assertEquals(0, listaDeLojas.size());
     }
+    */
 
     @Test
     public void testListarLoja() {
@@ -379,7 +401,7 @@ public class Testes {
         listaDeProdutos.add(produto2);
 
         Produto novoProduto = new Produto(1, "Camiseta Azul", 10, 29.99, "Vestu√°rio", "Nike");
-        String resultado = produto1.atualizar(novoProduto, listaDeProdutos);
+        String resultado = produto1.atualizar(novoProduto);
         assertEquals("Produto atualizado\n", resultado);
         assertEquals("Camiseta Azul", listaDeProdutos.get(0).getDescricao());
     }
@@ -391,7 +413,7 @@ public class Testes {
         listaDeProdutos.add(produto1);
 
         Produto novoProduto = new Produto(3, "Jaqueta", 8, 79.99, "Vestu√°rio", "Puma");
-        String resultado = produto2.atualizar(novoProduto, listaDeProdutos);
+        String resultado = produto2.atualizar(novoProduto);
         assertEquals("Produto n√£o encontrado\n", resultado);
     }
 
@@ -479,6 +501,56 @@ public class Testes {
         Serializacao.gravarArquivo(lista, nomeArquivo);
     }
     
-    //FIM DOS TESTES PARA SERIALIZACAO
+        // TESTES PARA CARRINHO:
+        @Test
+        public void testAdicionarProdutoCarrinho() {
+            Carrinho carrinho = new Carrinho();
+            Produto produto = new Produto(1, "Produto Teste", 10, 39.99, "Vestu·rio", "Adidas");
+
+            carrinho.adicionarProduto(produto, 1);
+            Assertions.assertEquals(1, carrinho.getListaProdutos().size());
+            Assertions.assertEquals(produto, carrinho.getListaProdutos().get(0));
+        }
+
+        @Test
+        public void testRemoverProdutoCarrinho() {
+            Carrinho carrinho = new Carrinho();
+            Produto produto = new Produto(1, "Produto Teste", 10, 39.99, "Vestu·rio", "Adidas");
+            carrinho.adicionarProduto(produto,1);
+
+            carrinho.removerProduto(produto);
+            Assertions.assertEquals(0, carrinho.getListaProdutos().size());
+        }
+
+        @Test
+        public void testCalcularValorTotalCarrinho() {
+            Carrinho carrinho = new Carrinho();
+            Produto produto1 = new Produto(1, "Produto 1", 10, 39.99, "Vestu·rio", "Adidas");
+            Produto produto2 = new Produto(2, "Produto 2", 5, 20.25, "Livros", "Marca");
+
+            carrinho.adicionarProduto(produto1,1);
+            carrinho.adicionarProduto(produto2,1);
+
+            double valorTotal = carrinho.calcularTotal();
+            Assertions.assertEquals(285.0, valorTotal);
+        }
+
+        @Test
+        public void testEsvaziarCarrinho() {
+            Carrinho carrinho = new Carrinho();
+            Produto produto1 = new Produto(1, "Produto 1", 10, 39.99, "Vestu·rio", "Adidas");
+            Produto produto2 = new Produto(2, "Produto 2", 5, 20.25, "Livros", "Marca");
+
+            carrinho.adicionarProduto(produto1,1);
+            carrinho.adicionarProduto(produto2,1);
+
+            carrinho.limparCarrinho();
+            Assertions.assertEquals(0, carrinho.getListaProdutos().size());
+        }
+
+        // ...
+
+    }
+
     
-}
+

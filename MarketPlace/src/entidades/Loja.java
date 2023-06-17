@@ -186,7 +186,22 @@ public class Loja implements IFCrud<Loja>, Serializable{
 		}
 		return "Loja não encontrada\n";
 	}
+	
+	
+	public String remover() {
+	    for (int i = 0; i < Fachada.listaLojas.size(); i++) {
+	        int idDaLoja = Fachada.listaLojas.get(i).getId();
 
+	        if (idDaLoja == this.id) {
+	            Fachada.listaLojas.remove(i);
+	            Fachada.listaDeObjetos.remove(this); // Remover o objeto da lista de objetos
+	            return "Loja removida \n";
+	        }
+	    }
+	    return "Loja n�o encontrada \n";
+	}
+	
+	/*
 	public String remover() {
 		for(int i = 0; i < Fachada.listaLojas.size(); i++){
 			int idDaLoja = Fachada.listaLojas.get(i).getId();
@@ -200,6 +215,7 @@ public class Loja implements IFCrud<Loja>, Serializable{
 		}
 		return "Loja não encontrada \n";
 	}
+	*/
 
 	public void listar(ArrayList<Loja> listaDeLojas) {
 		System.out.println("Lista de Lojas: \n");

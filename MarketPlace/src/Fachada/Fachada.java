@@ -18,7 +18,7 @@ public class Fachada {
 	private static int id = 1; // Id para Lojas e compradores
 	public static int idDoUsuarioAtual;
 	public static ArrayList<Object> listaDeObjetos = new ArrayList<>();
-	static Scanner sc = new Scanner(System.in);
+	public static Scanner sc = new Scanner(System.in);
 
 	public Fachada() {
 	}
@@ -92,7 +92,8 @@ public class Fachada {
 			menuDoComprador();
 		}
 
-	}// Fim do metodo menuDoComprador()
+	}
+	// Fim do metodo menuDoComprador()
 	
 	public static void menuComprarProduto() {
 		

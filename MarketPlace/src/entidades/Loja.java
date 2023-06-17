@@ -192,7 +192,9 @@ public class Loja implements IFCrud<Loja>, Serializable{
 			int idDaLoja = Fachada.listaLojas.get(i).getId();
 
 			if (idDaLoja == this.id){
+				Fachada.listaDeObjetos.remove(Fachada.listaLojas.get(i));
 				Fachada.listaLojas.remove(i);
+				
 				return "Loja removida \n";
 			}
 		}
@@ -211,7 +213,7 @@ public class Loja implements IFCrud<Loja>, Serializable{
 	public void listarProdutos() {
 		System.out.println("Lista de Produtos: \n");
 		System.out.println("ID -> Descricao -> Valor");
-
+		
 		for(Produto produto : this.getListaDeProdutos()) {
 			System.out.println(produto.getId() + " -> " + produto.getDescricao() + " -> R$" + produto.getValor());
 		}

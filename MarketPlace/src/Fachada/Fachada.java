@@ -58,7 +58,7 @@ public class Fachada {
 	public static void menuDoComprador() {
 		recuperarID();
 
-		System.out.println("MENU COMPRADOR");
+		System.out.println("\nMENU COMPRADOR");
 		System.out.println("1- Ver Produtos");
 		System.out.println("2- Configurar Conta");
 		System.out.println("3- Sair");
@@ -78,6 +78,7 @@ public class Fachada {
 		switch (comandoComprador) {
 		case 1:
 			listarProdutos();
+			menuComprarProduto();
 			break;
 		case 2:
 			menuContaComprador();
@@ -92,11 +93,189 @@ public class Fachada {
 		}
 
 	}// Fim do metodo menuDoComprador()
+	
+	public static void menuComprarProduto() {
+		
+		System.out.println("\nCOMPRADOR - MENU PRODUTOS");
+		System.out.println("1- Adicionar um produto ao carrinho");
+		System.out.println("2- Remover um produto do carrinho");
+		System.out.println("3- Ver Carrinho");
+		System.out.println("4- Ver Produtos");
+		System.out.println("5- Finalizar Compra");
+		System.out.println("6- Sair e cancelar compra");
+		System.out.println("");
+		System.out.println("Insira uma opcao:");
+
+		int comandoComprador = 0;
+
+		try {
+			comandoComprador = sc.nextInt();
+			sc.nextLine(); // Consumir a linha pendente
+		} catch (InputMismatchException exception) {
+			System.out.println("Comando inválido");
+			menuComprarProduto();
+		}
+		
+		// Criar comprador para realizar as operações
+		Comprador comprador = listaCompradores.stream().filter((c) -> c.getId() == idDoUsuarioAtual).findFirst().get();
+		
+		switch (comandoComprador) {
+		case 1:
+			//Adicionar um Produto do Carrinho:
+
+			System.out.println("Informe o id do produto que deseja comprar: ");
+			int idProdutoCompra = 0;
+			
+			try {
+				idProdutoCompra = sc.nextInt();
+				sc.nextLine();
+			}catch(InputMismatchException ex) {
+				System.out.println("Digite um ID válido");
+				menuComprarProduto();
+			}
+			
+			Produto produtoCompra = new Produto();
+			
+			//Se o produto foi encontrado e tiver estoque disponível
+			if(getProdutoPorId(idProdutoCompra) != null && getProdutoPorId(idProdutoCompra).getQuantidade() > 0) {
+				produtoCompra = getProdutoPorId(idProdutoCompra);
+			}else {
+				System.out.println("Produto não encontrado ou sem estoque!");
+				menuComprarProduto();
+			}
+			
+			System.out.println("Produto \'" + produtoCompra.getDescricao() + "\' selecionado!");
+
+			System.out.println("Digite a quantidade que deseja comprar (Qnt. disponível = " + produtoCompra.getQuantidade() +"): ");
+			
+			int qntCompra = 0;
+			try {
+				qntCompra = sc.nextInt();
+				sc.nextLine();
+			}catch(InputMismatchException ex) {
+				System.out.println("Quantidade inválida");
+				menuComprarProduto();
+			}
+			
+			if (qntCompra > produtoCompra.getQuantidade() || qntCompra <= 0) {
+				System.out.println("Quantidade inválida ou indisponível!");
+			}else {
+				//Adicionar ao carrinho:
+				int novoEstoque = produtoCompra.getQuantidade() - qntCompra;
+				comprador.getCarrinho().adicionarProduto(produtoCompra, qntCompra);
+				System.out.println("Produto adicionado ao carrinho!");
+				
+				//Remover do estoque:
+				produtoCompra.setQuantidade(novoEstoque);
+			}
+			gravarObjetos();
+			menuComprarProduto();
+			break;
+		case 2:
+			//Remover um Produto do Carrinho:
+			if(comprador.getCarrinho().getListaProdutos().isEmpty()) {
+				System.out.println("Carrinho vazio!");
+				menuComprarProduto();
+			}
+			System.out.println("ID -> Descricao -> Valor -> Quantidade");
+			for(Produto produto : comprador.getCarrinho().getListaProdutos()) {
+				System.out.println(produto.getId() + " -> " + produto.getDescricao() + " -> R$" + produto.getValor() + " -> " + produto.getQuantidade());
+			}
+			System.out.println("Digite o id do produto que deseja remover: ");
+			int idRemover = 0;
+			try {
+				idRemover = sc.nextInt();
+				sc.nextLine();
+			}catch(InputMismatchException ex) {
+				System.out.println("Id de produto inválido");
+				menuComprarProduto();
+			}
+			
+			//Removendo do carrinho:
+			for(Produto produto : comprador.getCarrinho().getListaProdutos()) {
+				if(produto.getId() == idRemover) {
+					System.out.println("Produto " + produto.getDescricao() + " removido!");
+					comprador.getCarrinho().removerProduto(produto);
+					
+					//Devolvendo produto ao estoque:
+					Produto produtoAtt = getProdutoPorId(produto.getId());
+					produtoAtt.setQuantidade(produtoAtt.getQuantidade() + produto.getQuantidade());
+					
+					gravarObjetos();
+					menuComprarProduto();
+				}
+			}
+			System.out.println("Produto não encontrado no carrinho!");
+			menuComprarProduto();
+			break;
+		case 3:
+			//Ver Produto no Carrinho
+			System.out.println("Produtos no carrinho: ");
+			for(Produto produto : comprador.getCarrinho().getListaProdutos()) {
+				System.out.println(produto.toString());
+			}
+			menuComprarProduto();
+			break;//Fim de Ver Produto no Carrinho
+		case 4:
+			//Ver Produtos para Compra
+			listarProdutos();
+			menuComprarProduto();
+			break; //Fim de Ver Produtos
+		case 5:
+			//Finalizar Compra
+			System.out.println("O total do seu carrinho é R$ " + comprador.getCarrinho().calcularTotal());
+			System.out.println("Deseja finalizar a compra?");
+			System.out.println("1- SIM");
+			System.out.println("2- NAO");
+			int finalizar = sc.nextInt();
+			sc.nextLine();
+			if(finalizar == 1) {
+				System.out.println("Compra finalizada, obrigado pela compra!");
+				comprador.getCarrinho().limparCarrinho();
+				gravarObjetos();
+				menuComprarProduto();
+			}else if(finalizar == 2) {
+				System.out.println("Compra nao finalizada!");
+				menuComprarProduto();
+			}
+			gravarObjetos();
+			System.out.println("Comando inválido, compra nao finalizada!");
+			menuComprarProduto();
+			break; //Fim de Finalizar Compra
+		case 6:
+			//Sair e cancelar compra
+			System.out.println("Tem certeza que deseja cancelar a compra?");
+			System.out.println("1- SIM");
+			System.out.println("2- NAO");
+			int cancelar = sc.nextInt();
+			sc.nextLine();
+			if(cancelar == 1) {
+				//Compra cancelada, devolvendo itens ao estoque:
+				for(Produto produto : comprador.getCarrinho().getListaProdutos()){
+					Produto novoProduto = getProdutoPorId(produto.getId());
+					novoProduto.setQuantidade(novoProduto.getQuantidade() + produto.getQuantidade());
+				}
+				System.out.println("Compra Cancelada!");
+				comprador.getCarrinho().limparCarrinho();
+				gravarObjetos();
+				menuDoComprador();
+			}else if(cancelar == 2) {
+				System.out.println("Compra nao cancelada, voltando para o menu!");
+				menuComprarProduto();
+			}
+			gravarObjetos();
+			break;
+		default:
+			System.out.println("Comando inválido");
+			menuComprarProduto();
+		}
+
+	}// Fim do metodo menuComprarProduto()
 
 	public static void menuDaLoja() {
 		recuperarID();
 
-		System.out.println("MENU LOJA");
+		System.out.println("\nMENU LOJA");
 		System.out.println("1- Cadastrar Produto");
 		System.out.println("2- Exibir Produto");
 		System.out.println("3- Atualizar Produto");
@@ -144,9 +323,6 @@ public class Fachada {
 			produto.setIdLoja(loja.getId());
 			produto.cadastrar();
 
-			ArrayList<Produto> produtosLoja = loja.getListaDeProdutos();
-			produtosLoja.add(produto);
-			loja.setListaDeProdutos(produtosLoja);
 			gravarObjetos();
 			menuDaLoja();
 			break; // Fim de Cadastrar Produto
@@ -314,7 +490,7 @@ public class Fachada {
 	public static void menuContaLoja() {
 		recuperarID();
 
-		System.out.println("MENU LOJA - CONFIGURAR CONTA");
+		System.out.println("\nMENU LOJA - CONFIGURAR CONTA");
 		System.out.println("1- Exibir informações da conta");
 		System.out.println("2- Mudar Nome");
 		System.out.println("3- Mudar Email");
@@ -428,7 +604,7 @@ public class Fachada {
 	public static void menuContaComprador() {
 		recuperarID();
 
-		System.out.println("MENU COMPRADOR - CONFIGURAR CONTA");
+		System.out.println("\nMENU COMPRADOR - CONFIGURAR CONTA");
 		System.out.println("1- Exibir informações da conta");
 		System.out.println("2- Mudar Nome");
 		System.out.println("3- Mudar Email");
@@ -571,45 +747,44 @@ public class Fachada {
         }
     }
     return null; // Retorna null se nenhuma loja for encontrada com o ID fornecido
-}	
+	} //Fim do metodo getLojaPorId
+	
+	public static Comprador getCompradorPorId(int id) {
+	    for (Comprador comprador : listaCompradores) {
+	        if (comprador.getId() == id) {
+	            return comprador;
+	        }
+	    }
+	    return null; // Retorna null se nenhum comprador for encontrada com o ID fornecido
+	} //Fim do metodo getCompradorPorId
+	
+	public static Produto getProdutoPorId(int id) {
+	    for (Loja loja : listaLojas) {
+	        for (Produto produto : loja.getListaDeProdutos()) {
+	            if (produto.getId() == id) {
+	            	return produto;
+	            }
+	        }
+	    }
+	    return null; // Retorna null se nenhum produto for encontrada com o ID fornecido
+	} //Fim do metodo getProdutoPorId
 	
 	public static void listarProdutos() {
     if (listaLojas.isEmpty()) {
         System.out.println("Ainda não há lojas cadastradas!");
         menuDoComprador();
     } else {
-        for (Loja loja : listaLojas) {
-            System.out.println("\nLoja " + loja.getId() + " - Lista de Produtos" + ": \n");
+    	System.out.println("\nLista de Produtos:\n");
+        System.out.println("ID  ->  Descricao  ->  Valor  ->  Quantidade  ->  Tipo");
+        for (Loja loja : listaLojas) { 
             List<Produto> produtosDaLoja = loja.getListaDeProdutos();
-            if (produtosDaLoja.isEmpty()) {
-                System.out.println("Não há produtos cadastrados nesta loja!");
-            } else {
-                for (Produto produto : produtosDaLoja) {
-                    System.out.println(produto.toString()); // Exibir as informações de cada produto
-                }
+            
+            for (Produto produto : produtosDaLoja) {
+            	System.out.println(produto.getId() + " -> " + produto.getDescricao() + " -> R$" + produto.getValor() + " -> " + produto.getQuantidade() + " -> " + produto.getTipo());
             }
         }
-        menuDoComprador();
     }
    }
-
-
-	/* 
-	public static void listarProdutos() {
-
-		if (listaLojas.isEmpty()) {
-			System.out.println("Ainda não há produtos cadastrados!");
-			menuDoComprador();
-		} else {
-			for (Loja loja : listaLojas) {
-				Produto produto = new Produto();
-				System.out.println("\nLoja " + loja.getId() + " - Lista de Produtos" + ": \n");
-				produto.listar(loja.getListaDeProdutos()); // Lista todos os produtos de cada Loja
-			}
-			menuDoComprador();
-		}
-	}
-	*/
 
 	// Método para recuperar o Id de acordo com os objetos do arquivo
 	public static int recuperarID() {
@@ -632,7 +807,7 @@ public class Fachada {
 	public static void cadastrarComprador(String nome, String email, String senha, String cpf, String endereco) {
 		Comprador comprador = new Comprador(id, nome, email, senha, "Comprador", cpf, endereco);
 		comprador.cadastrar();
-		lerObjetos();
+		//lerObjetos();
 		listaDeObjetos.add(comprador);
 
 		idDoUsuarioAtual = id;

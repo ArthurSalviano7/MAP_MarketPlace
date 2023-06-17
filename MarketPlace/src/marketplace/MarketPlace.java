@@ -20,7 +20,7 @@ public class MarketPlace {
 	}
 
 	public static void menu() {
-		System.out.println("MENU");
+		System.out.println("\nMENU");
 		System.out.println("1- Login");
 		System.out.println("2- Cadastrar comprador");
 		System.out.println("3- Cadastrar loja");

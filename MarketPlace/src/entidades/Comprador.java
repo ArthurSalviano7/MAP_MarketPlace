@@ -18,7 +18,7 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
 	private String cpf; // pode ser um inteiro talvez
 	private String endereco;
 	private double pontuacao;
-	private Carrinho carrinho;
+	private Carrinho carrinho = new Carrinho();
 	private ArrayList<Produto> listaHistorico = new ArrayList<>();
 	
 	public Comprador() {

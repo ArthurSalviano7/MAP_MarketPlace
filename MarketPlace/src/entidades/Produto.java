@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import Fachada.Fachada;
 
 
-public class Produto implements IFCrud<Produto>, Serializable{
+public class Produto implements IFCrud<Produto>, Serializable {
 	
 	/**
 	 * 
@@ -20,7 +20,7 @@ public class Produto implements IFCrud<Produto>, Serializable{
 	private double valor;
 	private String tipo; //categoria do produto
 	private String marca;
-	private int idLoja;
+	private int idLoja; //id da Loja responsável pelo produto
 	
 	public Produto() {}
 	
@@ -40,6 +40,17 @@ public class Produto implements IFCrud<Produto>, Serializable{
 		this.tipo = tipo;
 		this.marca = marca;
 	}
+	
+	public Produto(Produto produto) {
+		this.id = produto.id;
+		this.descricao = produto.descricao;
+		this.quantidade = produto.quantidade;
+		this.valor = produto.valor;
+		this.tipo = produto.tipo;
+		this.marca = produto.marca;
+	}
+	
+	
 
 	public int getId() {
 		return id;

@@ -171,7 +171,7 @@ public class Fachada {
 			}
 			gravarObjetos();
 			menuComprarProduto();
-			break;
+			break; // Fim Adicionar um Produto
 		case 2:
 			//Remover um Produto do Carrinho:
 			if(comprador.getCarrinho().getListaProdutos().isEmpty()) {
@@ -212,8 +212,9 @@ public class Fachada {
 		case 3:
 			//Ver Produto no Carrinho
 			System.out.println("Produtos no carrinho: ");
+			System.out.println("ID -> Descricao -> Valor -> Quantidade -> Tipo -> Marca");
 			for(Produto produto : comprador.getCarrinho().getListaProdutos()) {
-				System.out.println(produto.toString());
+				System.out.println(produto.getId() + " -> " + produto.getDescricao() + " -> R$" + produto.getValor() + " -> " + produto.getQuantidade() + " -> " + produto.getTipo() + " -> " + produto.getMarca());
 			}
 			menuComprarProduto();
 			break;//Fim de Ver Produto no Carrinho
@@ -776,12 +777,12 @@ public class Fachada {
         menuDoComprador();
     } else {
     	System.out.println("\nLista de Produtos:\n");
-        System.out.println("ID  ->  Descricao  ->  Valor  ->  Quantidade  ->  Tipo");
+        System.out.println("ID  ->  Descricao  ->  Valor  ->  Quantidade  ->  Tipo  ->  Marca");
         for (Loja loja : listaLojas) { 
             List<Produto> produtosDaLoja = loja.getListaDeProdutos();
             
             for (Produto produto : produtosDaLoja) {
-            	System.out.println(produto.getId() + " -> " + produto.getDescricao() + " -> R$" + produto.getValor() + " -> " + produto.getQuantidade() + " -> " + produto.getTipo());
+            	System.out.println(produto.getId() + " -> " + produto.getDescricao() + " -> R$" + produto.getValor() + " -> " + produto.getQuantidade() + " -> " + produto.getTipo() + " -> " + produto.getMarca());
             }
         }
     }

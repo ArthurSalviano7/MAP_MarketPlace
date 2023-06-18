@@ -198,7 +198,7 @@ public class Loja implements IFCrud<Loja>, Serializable{
 	            return "Loja removida \n";
 	        }
 	    }
-	    return "Loja não encontrada \n";
+	    return "Loja nï¿½o encontrada \n";
 	}
 	
 	/*
@@ -228,10 +228,9 @@ public class Loja implements IFCrud<Loja>, Serializable{
 	
 	public void listarProdutos() {
 		System.out.println("Lista de Produtos: \n");
-		System.out.println("ID -> Descricao -> Valor");
-		
+		System.out.println("ID  ->  Descricao  ->  Valor  ->  Quantidade  ->  Tipo  ->  Marca");		
 		for(Produto produto : this.getListaDeProdutos()) {
-			System.out.println(produto.getId() + " -> " + produto.getDescricao() + " -> R$" + produto.getValor());
+        	System.out.println(produto.getId() + " -> " + produto.getDescricao() + " -> R$" + produto.getValor() + " -> " + produto.getQuantidade() + " -> " + produto.getTipo() + " -> " + produto.getMarca());
 		}
 	}
 

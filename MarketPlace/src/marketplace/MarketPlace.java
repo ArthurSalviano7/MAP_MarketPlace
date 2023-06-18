@@ -26,16 +26,21 @@ public class MarketPlace {
 		System.out.println("3- Cadastrar loja");
 		System.out.println("4- Encerrar");
 		System.out.println("");
-		System.out.println("Insira uma opcao:");
+		System.out.print("Insira uma opção: ");
 
 		int comando = 0;
+		boolean entradaValida = false;
 		
-		try {
-			comando = sc.nextInt();
-			sc.nextLine(); // Consumir a linha pendente
-		}catch(InputMismatchException exception) {
-			System.out.println("Comando inválido");
-			menu();
+		while (!entradaValida) {
+		    String entrada = sc.nextLine();
+
+		    try {
+		        comando = Integer.parseInt(entrada);
+		        entradaValida = true;
+		    } catch (NumberFormatException e) {
+		        System.out.println("Comando inválido");
+		        menu();
+		    }
 		}
 		
 		switch(comando) {

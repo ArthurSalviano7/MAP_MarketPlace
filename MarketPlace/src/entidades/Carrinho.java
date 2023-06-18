@@ -20,6 +20,19 @@ public class Carrinho implements Serializable{
     public void removerProduto(Produto produto){
         listaProdutos.remove(produto);
     }
+    
+    public void removerProduto(int id) {
+        Produto produtoRemover = null;
+        for (Produto produto : listaProdutos) {
+            if (produto.getId() == id) {
+                produtoRemover = produto;
+                break;
+            }
+        }
+        if (produtoRemover != null) {
+            listaProdutos.remove(produtoRemover);
+        }
+    }
 
     public List<Produto> getListaProdutos(){
         return listaProdutos;

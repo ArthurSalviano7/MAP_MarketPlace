@@ -24,6 +24,7 @@ public class MarketPlace {
 		System.out.println("1- Login");
 		System.out.println("2- Cadastrar comprador");
 		System.out.println("3- Cadastrar loja");
+		System.out.println("4- Encerrar");
 		System.out.println("");
 		System.out.println("Insira uma opcao:");
 
@@ -40,19 +41,23 @@ public class MarketPlace {
 		switch(comando) {
 			case 1:
 				Login();
+				menu();
+				break;
 			case 2:
 				cadastrarComprador();
 				break;
 			case 3:
 				cadastrarLoja();
-				break; 
+				break;
+			case 4:
+				System.exit(0);
 			default:
 				System.out.println("Comando inválido");
 				menu();
 		}
 	}
 	
-	private static void Login() {
+	public static void Login() {
 		System.out.println("LOGIN");
 		System.out.println("Insira o email:");
 		String email = sc.nextLine();
@@ -72,12 +77,9 @@ public class MarketPlace {
 			System.out.println("-------------------");
 			System.out.println("Autenticação falhou!!\n");
 		}
-		
-		
-		menu();
 	}
 	
-	private static void cadastrarComprador() {
+	public static void cadastrarComprador() {
 		System.out.print("Digite seu nome: ");
 		String nome = sc.nextLine();
 		System.out.print("Digite seu email: ");
@@ -91,7 +93,7 @@ public class MarketPlace {
 		fachada.cadastrarComprador(nome, email, senha, cpf, endereco);
 	}
     
-	private static void cadastrarLoja() {
+	public static void cadastrarLoja() {
 		System.out.print("Digite o nome da Loja: ");
 		String nome = sc.nextLine();
 		System.out.print("Digite email da Loja: ");

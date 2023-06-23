@@ -91,7 +91,7 @@ public class MarketPlace {
 		String email = sc.nextLine();
 		System.out.print("Digite a senha desejada: ");
 		String senha = sc.nextLine();
-		System.out.print("Digite o seu cpf: ");
+		System.out.print("Digite o seu CPF: ");
 		String cpf	= sc.nextLine();
 		System.out.print("Digite o seu endereco: ");
 		String endereco = sc.nextLine();

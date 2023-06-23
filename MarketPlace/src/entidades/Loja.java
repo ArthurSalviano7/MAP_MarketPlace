@@ -21,6 +21,8 @@ public class Loja implements IFCrud<Loja>, Serializable{
 	private double reputacao;
 	private String conceito; //Avaliação da loja(ruim, medio, bom, excelente)
 	private ArrayList<Produto> listaDeProdutos = new ArrayList<>();
+	private int totalAvaliacoes;
+	private int somaAvaliacoes;
 	
 	public Loja() {}
 	
@@ -33,6 +35,10 @@ public class Loja implements IFCrud<Loja>, Serializable{
 		this.cnpj = cnpj;
 		this.cpf = cpf;
 		this.endereco = endereco;
+		this.totalAvaliacoes = 0; //edit
+		this.somaAvaliacoes = 0; //edit
+		this.reputacao = calcularReputacao();
+    	this.conceito = definirConceito();
 	}
 	
 	public Loja(int id, String nome, String email, String senha, String tipoUsuario, String cnpj, String cpf, String endereco,
@@ -45,10 +51,10 @@ public class Loja implements IFCrud<Loja>, Serializable{
 		this.cnpj = cnpj;
 		this.cpf = cpf;
 		this.endereco = endereco;
-		this.reputacao = reputacao;
-		this.conceito = conceito;
-
-		
+		//this.totalAvaliacoes = 0;
+		//this.somaAvaliacoes = 0;
+		//this.reputacao = 0;
+		//this.conceito = "";
 	}
 	
 	public int getId() {
@@ -201,22 +207,6 @@ public class Loja implements IFCrud<Loja>, Serializable{
 	    return "Loja n�o encontrada \n";
 	}
 	
-	/*
-	public String remover() {
-		for(int i = 0; i < Fachada.listaLojas.size(); i++){
-			int idDaLoja = Fachada.listaLojas.get(i).getId();
-
-			if (idDaLoja == this.id){
-				Fachada.listaDeObjetos.remove(Fachada.listaLojas.get(i));
-				Fachada.listaLojas.remove(i);
-				
-				return "Loja removida \n";
-			}
-		}
-		return "Loja não encontrada \n";
-	}
-	*/
-
 	public void listar(ArrayList<Loja> listaDeLojas) {
 		System.out.println("Lista de Lojas: \n");
 		System.out.println("ID -> Nome da Loja -> CNPJ");
@@ -234,6 +224,36 @@ public class Loja implements IFCrud<Loja>, Serializable{
 		}
 	}
 
+	//Atualiza os atributos
+	public void adicionarAvaliacao(int avaliacao) {
+    	totalAvaliacoes++;
+    	somaAvaliacoes += avaliacao;
+		reputacao = calcularReputacao();
+		conceito = definirConceito();
+    	
+	}
+
+	//Atualiza o valor da reputação
+	private double calcularReputacao() {
+    if (totalAvaliacoes == 0) {
+        return 0.0;
+    } else {
+        return (double) somaAvaliacoes / totalAvaliacoes;
+    	}
+	}
+
+	private String definirConceito() {
+    	if (reputacao >= 4.5) {
+        	return "Excelente";
+    	} else if (reputacao >= 3.5) {
+       	 	return "Bom";
+    	} else if (reputacao >= 2.5) {
+        	return "Médio";
+    	} else {
+        	return "Ruim";
+    	}
+	}
+
 	public String toString(){
         return "ID: " + id + "\n"
                 + "Nome: " + nome + "\n"
@@ -241,7 +261,9 @@ public class Loja implements IFCrud<Loja>, Serializable{
                 + "Senha: " + senha + "\n"
                 + "Tipo de Usuário: " + tipoUsuario + "\n"
                 + "CPF: " + cnpj + "\n"
-                + "Endereço: " + endereco +"\n";
+                + "Endereço: " + endereco + "\n"
+				+ "Reputação: " + reputacao + "\n"
+				+ "Conceito: " + conceito;
     }
 
 

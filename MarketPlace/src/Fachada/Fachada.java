@@ -19,6 +19,7 @@ public class Fachada {
 	public static int idDoUsuarioAtual;
 	public static ArrayList<Object> listaDeObjetos = new ArrayList<>();
 	public static Scanner sc = new Scanner(System.in);
+	public static int avaliacao;
 
 	public Fachada() {
 	}
@@ -234,8 +235,14 @@ public class Fachada {
 			if(finalizar == 1) {
 				System.out.println("Compra finalizada, obrigado pela compra!");
 				comprador.getCarrinho().limparCarrinho();
+				// Nota para a loja
+				System.out.println("Avalie a loja de 1 a 5 : ");
+				avaliacao = sc.nextInt();
+				sc.nextLine();
+				System.out.println("Nota : " + avaliacao);
 				gravarObjetos();
 				menuComprarProduto();
+				
 			}else if(finalizar == 2) {
 				System.out.println("Compra nao finalizada!");
 				menuComprarProduto();

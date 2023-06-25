@@ -6,9 +6,6 @@ import Fachada.Fachada;
 
 public class Loja implements IFCrud<Loja>, Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 20L;
 	private int id;
 	private String nome;

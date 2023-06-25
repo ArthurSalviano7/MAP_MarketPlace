@@ -120,7 +120,7 @@ public class Fachada {
 		
 		// Criar comprador para realizar as operações
 		Comprador comprador = listaCompradores.stream().filter((c) -> c.getId() == idDoUsuarioAtual).findFirst().get();
-		
+		Produto produtoCompra = new Produto();
 		switch (comandoComprador) {
 		case 1:
 			//Adicionar um Produto do Carrinho:
@@ -136,7 +136,7 @@ public class Fachada {
 				menuComprarProduto();
 			}
 			
-			Produto produtoCompra = new Produto();
+			//Produto produtoCompra = new Produto();
 			
 			//Se o produto foi encontrado e tiver estoque disponível
 			if(getProdutoPorId(idProdutoCompra) != null && getProdutoPorId(idProdutoCompra).getQuantidade() > 0) {
@@ -240,6 +240,21 @@ public class Fachada {
 				avaliacao = sc.nextInt();
 				sc.nextLine();
 				System.out.println("Nota : " + avaliacao);
+				System.out.println("Comentário sobre a loja : ");
+				String comentario = sc.nextLine();
+				
+				if(produtoCompra != null){
+					int idDaLoja = produtoCompra.getIdLoja();
+					System.out.println(idDaLoja);
+					Loja compraLoja = listaLojas.stream().filter(loja -> loja.getId() == idDaLoja).findFirst().orElse(null);
+					if(compraLoja != null){
+					compraLoja.adicionarAvaliacao(avaliacao);
+					} else {
+						System.out.println("Loja não encontrada!");
+					}
+				}
+			
+		
 				gravarObjetos();
 				menuComprarProduto();
 				
@@ -825,7 +840,7 @@ public class Fachada {
 
 		menuDoComprador();
 	}
-
+    
 	public static void cadastrarLoja(String nome, String email, String senha, String cnpj, String cpf,
 			String endereco) {
 		Loja loja = new Loja(id, nome, email, senha, "Loja", cnpj, cpf, endereco);

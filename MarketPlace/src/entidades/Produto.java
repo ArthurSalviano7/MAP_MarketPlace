@@ -48,6 +48,7 @@ public class Produto implements IFCrud<Produto>, Serializable {
 		this.valor = produto.valor;
 		this.tipo = produto.tipo;
 		this.marca = produto.marca;
+		this.idLoja = produto.idLoja;
 	}
 	
 	

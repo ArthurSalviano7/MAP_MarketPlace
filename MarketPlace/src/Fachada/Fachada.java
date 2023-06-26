@@ -226,7 +226,13 @@ public class Fachada {
 			break; //Fim de Ver Produtos
 		case 5:
 			//Finalizar Compra
-			System.out.println("O total do seu carrinho é R$ " + comprador.getCarrinho().calcularTotal());
+			if(comprador.getPontuacao() >= 50) {
+				System.out.println("Pela sua pontuação, você ganhou frete grátis na compra !!");
+				System.out.println("O total do seu carrinho é R$ " + comprador.getCarrinho().calcularTotalComBeneficio());
+			}else {
+				System.out.println("O total do seu carrinho com frete é R$ " + comprador.getCarrinho().calcularTotalSemBeneficio());
+			}
+			
 			System.out.println("Deseja finalizar a compra?");
 			System.out.println("1- SIM");
 			System.out.println("2- NAO");
@@ -234,7 +240,6 @@ public class Fachada {
 			sc.nextLine();
 			if(finalizar == 1) {
 				System.out.println("Compra finalizada, obrigado pela compra!");
-				comprador.getCarrinho().limparCarrinho();
 				// Nota para a loja
 				System.out.println("Avalie a loja de 1 a 5 : ");
 				avaliacao = sc.nextInt();
@@ -242,18 +247,24 @@ public class Fachada {
 				System.out.println("Nota : " + avaliacao);
 				System.out.println("Comentário sobre a loja : ");
 				String comentario = sc.nextLine();
+				Double pontos = 0.0;
 				
-				if(produtoCompra != null){
-					int idDaLoja = produtoCompra.getIdLoja();
-					System.out.println(idDaLoja);
-					Loja compraLoja = listaLojas.stream().filter(loja -> loja.getId() == idDaLoja).findFirst().orElse(null);
-					if(compraLoja != null){
-					compraLoja.adicionarAvaliacao(avaliacao);
-					} else {
-						System.out.println("Loja não encontrada!");
-					}
+				for (Produto produto : comprador.getCarrinho().getListaProdutos()) {
+					//Procurar loja responsável por cada produto:
+					Loja lojaCompra = listaLojas.stream().filter((l) -> l.getId() == produto.getIdLoja()).findFirst().get();
+					lojaCompra.adicionarAvaliacao(avaliacao);
+					
+					//Adicionar pontuacao para cada produto comprado:
+					pontos += produto.getQuantidade() * 10;
 				}
-			
+				
+				//Diminui a pontuação por conta do frete gratis
+				if(comprador.getPontuacao() >= 50) {
+					comprador.setPontuacao(comprador.getPontuacao() - 50);
+				}
+				//Aumenta a pontuação do comprador a cada compra
+				comprador.setPontuacao(comprador.getPontuacao() + pontos);
+				comprador.getCarrinho().limparCarrinho();			
 		
 				gravarObjetos();
 				menuComprarProduto();

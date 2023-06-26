@@ -55,7 +55,7 @@ public class CarrinhoTeste {
     	carrinho.adicionarProduto(produto, 1);
     	carrinho.adicionarProduto(produto2, 1);
 
-    	double valorTotal = carrinho.calcularTotal(); // 40 + 20
+    	double valorTotal = carrinho.calcularTotalComBeneficio(); // 40 + 20
     	Assertions.assertEquals(60, valorTotal);
     }
     
@@ -71,7 +71,7 @@ public class CarrinhoTeste {
     	carrinho.adicionarProduto(produto3, 3); //3*1.50 +
     	carrinho.adicionarProduto(produto4, 1); //25 = 212
 
-    	double valorTotal = carrinho.calcularTotal();
+    	double valorTotal = carrinho.calcularTotalComBeneficio();
     	Assertions.assertEquals(212, valorTotal);
     }
 

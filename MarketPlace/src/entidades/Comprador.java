@@ -17,7 +17,7 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
 	private String tipoUsuario;
 	private String cpf; // pode ser um inteiro talvez
 	private String endereco;
-	private double pontuacao;
+	private double pontuacao = 0;
 	private Carrinho carrinho = new Carrinho();
 	private ArrayList<Produto> listaHistorico = new ArrayList<>();
 	
@@ -129,7 +129,8 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
                 + "Senha: " + senha + "\n"
                 + "Tipo de Usuário: " + tipoUsuario + "\n"
                 + "CPF: " + cpf + "\n"
-                + "Endereço: " + endereco +"\n";
+                + "Endereço: " + endereco +"\n"
+                + "Pontuação: " + pontuacao +"\n";
     }
 
 	/* *

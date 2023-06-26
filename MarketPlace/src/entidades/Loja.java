@@ -225,8 +225,8 @@ public class Loja implements IFCrud<Loja>, Serializable{
 	public void adicionarAvaliacao(int avaliacao) {
     	totalAvaliacoes++;
     	somaAvaliacoes += avaliacao;
-		reputacao = calcularReputacao();
-		conceito = definirConceito();
+		this.reputacao = calcularReputacao();
+		this.conceito = definirConceito();
     	
 	}
 
@@ -240,11 +240,11 @@ public class Loja implements IFCrud<Loja>, Serializable{
 	}
 
 	private String definirConceito() {
-    	if (reputacao >= 4.5) {
+    	if (this.reputacao >= 4.5) {
         	return "Excelente";
-    	} else if (reputacao >= 3.5) {
+    	} else if (this.reputacao >= 3.5) {
        	 	return "Bom";
-    	} else if (reputacao >= 2.5) {
+    	} else if (this.reputacao >= 2.5) {
         	return "Médio";
     	} else {
         	return "Ruim";

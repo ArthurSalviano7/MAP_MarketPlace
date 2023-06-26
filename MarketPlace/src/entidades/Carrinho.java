@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Carrinho implements Serializable{
     private List<Produto> listaProdutos;
+    private Double frete = 15.00;
 
     public Carrinho(){
         listaProdutos = new ArrayList<>();
@@ -42,7 +43,16 @@ public class Carrinho implements Serializable{
         listaProdutos.clear();
     }
 
-    public double calcularTotal(){
+    public double calcularTotalSemBeneficio(){
+        double total = 0;
+        for (Produto produto : listaProdutos){
+            total += produto.getQuantidade() * produto.getValor();
+        }
+        total += frete;
+        return total;
+    }
+    
+    public double calcularTotalComBeneficio(){
         double total = 0;
         for (Produto produto : listaProdutos){
             total += produto.getQuantidade() * produto.getValor();

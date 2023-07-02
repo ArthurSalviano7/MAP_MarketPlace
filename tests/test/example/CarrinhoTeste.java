@@ -85,8 +85,45 @@ public class CarrinhoTeste {
 
     	carrinho.limparCarrinho();
     	Assertions.assertEquals(0, carrinho.getListaProdutos().size());
-    }
-   }
 
+		private Carrinho carrinho;
+
+		@BeforeEach
+		public void setup() {
+			carrinho = new Carrinho();
+		}
+
+		@Test
+		public void testCalcularTotalSemBeneficio() {
+			// Arrange
+			Produto produto1 = new Produto(1, "Produto 1", 15.0);
+			Produto produto2 = new Produto(2, "Produto 2", 30.0);
+
+			carrinho.adicionarProduto(produto1, 2);
+			carrinho.adicionarProduto(produto2, 3);
+
+			// Act
+			double total = carrinho.calcularTotalSemBeneficio();
+
+			// Assert
+			assertEquals(110.0, total);
+		}
+
+		@Test
+		public void testCalcularTotalComBeneficio() {
+			// Arrange
+			Produto produto1 = new Produto(1, "Produto 1", 10.0);
+			Produto produto2 = new Produto(2, "Produto 2", 45.0);
+
+			carrinho.adicionarProduto(produto1, 2);
+			carrinho.adicionarProduto(produto2, 3);
+
+			// Act
+			double total = carrinho.calcularTotalComBeneficio();
+
+			// Assert
+			assertEquals(100.0, total);
+		}
+	}
     
 

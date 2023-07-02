@@ -133,8 +133,9 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
                 + "Pontuação: " + pontuacao +"\n";
     }
 
-	
+	/* *
 	public void listarHistorico(){
+		System.out.println("Histórico de Compras : ");
 		for(Produto produto : listaHistorico){
 			System.out.println("Id : " + produto.getId());
 			System.out.println("Valor : " + produto.getValor());
@@ -144,7 +145,7 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
 			System.out.println("-----------------------");
 		}
 
-	}
+	}*/
 	
 	//CRUD Comprador:
 
@@ -211,14 +212,6 @@ public class Comprador implements IFCrud<Comprador>, Serializable{
 			for(Comprador comprador : listaDeCompradores) {
 				System.out.println(comprador.getId() + " -> " + comprador.getNome() + " -> " + comprador.getEmail());
 			}
-		}
-
-		public void adicionarProdutoHistorico(Produto produto){
-			listaHistorico.add(produto);
-		}
-
-		public ArrayList<Produto> getListaHistorico(){
-			return listaHistorico;
 		}
 }
 

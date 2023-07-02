@@ -105,9 +105,98 @@ public class LojaTeste {
         loja.getListaDeProdutos().add(produto1);
         loja.getListaDeProdutos().add(produto2);
         loja.listarProdutos();
-    }
-    
-   }
 
+        @BeforeEach
+        void setUp() {
+            loja = new Loja(1, "Loja Exemplo", "loja@example.com", "senha", "Tipo", "123456789", "987654321", "Endereço");
+        }
+
+        @Test
+        void adicionarAvaliacao_DeveAtualizarReputacaoEConceitoCorretamente() {
+            // Arrange
+            loja.adicionarAvaliacao(5);
+            loja.adicionarAvaliacao(4);
+            loja.adicionarAvaliacao(3);
+
+            // Act
+            double reputacao = loja.getReputacao();
+            String conceito = loja.getConceito();
+
+            // Assert
+            Assertions.assertEquals(4.0, reputacao, 0.01);
+            Assertions.assertEquals("Bom", conceito);
+        }
+
+        @Test
+        void calcularReputacao_DeveRetornarZeroSeNaoHouverAvaliacoes() {
+            // Act
+            double reputacao = loja.calcularReputacao();
+
+            // Assert
+            Assertions.assertEquals(0.0, reputacao, 0.01);
+        }
+
+        @Test
+        void calcularReputacao_DeveCalcularReputacaoCorretamente() {
+            // Arrange
+            loja.adicionarAvaliacao(5);
+            loja.adicionarAvaliacao(3);
+            loja.adicionarAvaliacao(4);
+
+            // Act
+            double reputacao = loja.calcularReputacao();
+
+            // Assert
+            Assertions.assertEquals(4.0, reputacao, 0.01);
+        }
+
+        @Test
+        void definirConceito_DeveRetornarExcelenteSeReputacaoMaiorOuIgualA4_5() {
+            // Arrange
+            loja.setReputacao(4.5);
+
+            // Act
+            String conceito = loja.definirConceito();
+
+            // Assert
+            Assertions.assertEquals("Excelente", conceito);
+        }
+
+        @Test
+        void definirConceito_DeveRetornarBomSeReputacaoMaiorOuIgualA3_5() {
+            // Arrange
+            loja.setReputacao(3.5);
+
+            // Act
+            String conceito = loja.definirConceito();
+
+            // Assert
+            Assertions.assertEquals("Bom", conceito);
+        }
+
+        @Test
+        void definirConceito_DeveRetornarMedioSeReputacaoMaiorOuIgualA2_5() {
+            // Arrange
+            loja.setReputacao(2.5);
+
+            // Act
+            String conceito = loja.definirConceito();
+
+            // Assert
+            Assertions.assertEquals("Médio", conceito);
+        }
+
+        @Test
+        void definirConceito_DeveRetornarRuimSeReputacaoMenorQue2_5() {
+            // Arrange
+            loja.setReputacao(1.5);
+
+            // Act
+            String conceito = loja.definirConceito();
+
+            // Assert
+            Assertions.assertEquals("Ruim", conceito);
+        }
+    }
     
 

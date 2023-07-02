@@ -259,7 +259,7 @@ public class Loja implements IFCrud<Loja>, Serializable{
                 + "Tipo de Usuário: " + tipoUsuario + "\n"
                 + "CPF: " + cnpj + "\n"
                 + "Endereço: " + endereco + "\n"
-				+ "Reputação: " + String.format("%.1f",reputacao) + "\n"
+				+ "Reputação: " + reputacao + "\n"
 				+ "Conceito: " + conceito;
     }
 

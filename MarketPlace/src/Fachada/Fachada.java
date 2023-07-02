@@ -115,7 +115,6 @@ public class Fachada {
 			sc.nextLine(); // Consumir a linha pendente
 		} catch (InputMismatchException exception) {
 			System.out.println("Comando inválido");
-			sc.nextLine();
 			menuComprarProduto();
 		}
 		
@@ -243,33 +242,21 @@ public class Fachada {
 				System.out.println("Compra finalizada, obrigado pela compra!");
 				// Nota para a loja
 				System.out.println("Avalie a loja de 1 a 5 : ");
-				try{
 				avaliacao = sc.nextInt();
 				sc.nextLine();
-				} catch(InputMismatchException exception){
-					System.out.println("Nota inválida");
-					sc.nextLine();
-				}
-
 				System.out.println("Nota : " + avaliacao);
 				System.out.println("Comentário sobre a loja : ");
 				String comentario = sc.nextLine();
 				Double pontos = 0.0;
 				
 				for (Produto produto : comprador.getCarrinho().getListaProdutos()) {
-					//comprador.adicionarProdutoHistorico(produto);
 					//Procurar loja responsável por cada produto:
 					Loja lojaCompra = listaLojas.stream().filter((l) -> l.getId() == produto.getIdLoja()).findFirst().get();
 					lojaCompra.adicionarAvaliacao(avaliacao);
 					
 					//Adicionar pontuacao para cada produto comprado:
 					pontos += produto.getQuantidade() * 10;
-					//comprador.getListaHistorico().addAll(comprador.getCarrinho().getListaProdutos());
-
 				}
-
-				comprador.getListaHistorico().addAll(comprador.getCarrinho().getListaProdutos());
-				
 				
 				//Diminui a pontuação por conta do frete gratis
 				if(comprador.getPontuacao() >= 50) {
@@ -659,8 +646,7 @@ public class Fachada {
 		System.out.println("4- Mudar Senha");
 		System.out.println("5- Mudar Endereco");
 		System.out.println("6- Excluir Conta");
-		System.out.println("7- Listar Histórico");
-		System.out.println("8- Sair");
+		System.out.println("7- Sair");
 		System.out.println("");
 		System.out.println("Insira uma opcao:");
 
@@ -747,11 +733,8 @@ public class Fachada {
 				menuContaComprador();
 			}
 			MarketPlace.menu();
-			break; // Fim de Excluir 
+			break; // Fim de Excluir
 		case 7:
-			System.out.println("Histórico de Compras : ");
-			comprador.listarHistorico();
-		case 8:
 			menuDoComprador();
 			break;
 		default:

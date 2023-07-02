@@ -126,6 +126,22 @@ public class Produto implements IFCrud<Produto>, Serializable {
         System.out.println("Loja não encontrada");
     }
 }
+
+
+	/* 
+	public void cadastrar() {
+    this.setId(idProduto);
+    idProduto++;
+    Loja loja = Fachada.getLojaPorId(idLoja); // Obter a loja correspondente ao ID
+    if (loja != null) {
+        loja.getListaDeProdutos().add(this); // Adicionar o produto à lista de produtos da loja
+        System.out.println("Produto cadastrado com sucesso");
+    } else {
+        System.out.println("Loja não encontrada");
+    }
+}
+	*/
+
 	
 	//Exibe o produto em determinada loja pelo id
 	public String exibir(int id, ArrayList<Produto> listaDeProdutos) { 
